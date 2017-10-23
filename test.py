@@ -1,30 +1,4 @@
 from numpy import *
-from os import listdir
-from os.path import isfile, join
-from os import walk
-
-def fib(n):    # die Fibonacci-Folge bis n ausgeben
-    # """Print the Fibonacci series up to n."""
-    a, b = 0, 1
-    while a < n:
-        print(a, end=' ')
-        a, b = b, a+b
-
-
-def start():
-    fib(2000)
-
-
-def test():
-    f = []
-    for dirpath, dirnames, filenames in walk('C:/Users/Taras/mustererkennungU1/datasource/training'):
-        f.extend(filenames)
-        print(filenames)
-        break
-    file = 'C:/Users/Taras/mustererkennungU1/datasource/training/' + filenames[0]
-    f = open(file, 'r')
-    print(f.readline())
-
 
 def taketrainingdict(trainigfolder ):
     output = {}
