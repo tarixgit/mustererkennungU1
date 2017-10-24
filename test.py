@@ -13,7 +13,76 @@ def taketrainingdict(trainigfolder ):
     return output
 
 
-def nnclassifier(testingarr, trainingdict):
+def n3classifier(testingarr, trainingdict):
+    arr = array(testingarr)
+
+    trainingarr = array(trainingdict[9])
+    differencearr = trainingarr - arr
+    differencearrsquare = differencearr ** 2
+    differencearrsum = differencearrsquare.sum(axis=1)
+    distancesarr = differencearrsum ** 0.5
+    distancesorted = sort(distancesarr)
+    minimum1 = distancesorted[0]
+    minimum2 = distancesorted[1]
+    minimum3 = distancesorted[2]
+    index1 = 9
+    index2 = 9
+    index3 = 9
+    for digit in range(9):
+        trainingarr = array(trainingdict[digit])
+        differencearr = trainingarr - arr
+        differencearrsquare = differencearr ** 2
+        differencearrsum = differencearrsquare.sum(axis=1)
+        distancesarr = differencearrsum ** 0.5
+        potentialmin = distancesarr.min()
+        if potentialmin < minimum1:
+            minimum1 = potentialmin
+            index1 = digit
+        else:
+            if potentialmin < minimum2:
+                minimum2 = potentialmin
+                index2 = digit
+            else:
+                if potentialmin < minimum3:
+                    minimum3 = potentialmin
+                    index3 = digit
+    result = index1
+    if index2 == index3:
+        result = index2
+    return result
+
+
+def n2classifier(testingarr, trainingdict):
+    arr = array(testingarr)
+
+    trainingarr = array(trainingdict[9])
+    differencearr = trainingarr - arr
+    differencearrsquare = differencearr ** 2
+    differencearrsum = differencearrsquare.sum(axis=1)
+    distancesarr = differencearrsum ** 0.5
+    distancesorted = sort(distancesarr)
+    minimum1 = distancesorted[0]
+    minimum2 = distancesorted[1]
+    index1 = 9
+    index2 = 9
+    for digit in range(9):
+        trainingarr = array(trainingdict[digit])
+        differencearr = trainingarr - arr
+        differencearrsquare = differencearr ** 2
+        differencearrsum = differencearrsquare.sum(axis=1)
+        distancesarr = differencearrsum ** 0.5
+        potentialmin = distancesarr.min()
+        if potentialmin < minimum1:
+            minimum1 = potentialmin
+            index1 = digit
+        else:
+            if potentialmin < minimum2:
+                minimum2 = potentialmin
+                index2 = digit
+    return index2
+
+
+def n1classifier(testingarr, trainingdict):
     arr = array(testingarr)
 
     trainingarr = array(trainingdict[9])
@@ -51,7 +120,7 @@ def read():
         digit = int(line[:1])
         #arr = list(map(lambda x: round(float(x) + 1, 5), line[2:].split(' ')))
         arr = list(map(float, line[2:].split(' ')))
-        foundDigit = nnclassifier(arr, trainingdict)
+        foundDigit = n3classifier(arr, trainingdict)
         if digit != foundDigit:
             errors += 1
             errorrate[digit] += 1
