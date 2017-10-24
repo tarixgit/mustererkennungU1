@@ -34,24 +34,26 @@ def n3classifier(testingarr, trainingdict):
         differencearrsquare = differencearr ** 2
         differencearrsum = differencearrsquare.sum(axis=1)
         distancesarr = differencearrsum ** 0.5
-        potentialmin = distancesarr.min()
-        if potentialmin < minimum1:
-            minimum3 = minimum2
-            minimum2 = minimum1
-            minimum1 = potentialmin
-            index3 = index2
-            index2 = index1
-            index1 = digit
-        else:
-            if potentialmin < minimum2:
+        distancesorted = sort(distancesarr)
+        for i in range(3):
+            potentialmin = distancesorted[0]
+            if potentialmin < minimum1:
                 minimum3 = minimum2
-                minimum2 = potentialmin
+                minimum2 = minimum1
+                minimum1 = potentialmin
                 index3 = index2
-                index2 = digit
+                index2 = index1
+                index1 = digit
             else:
-                if potentialmin < minimum3:
-                    minimum3 = potentialmin
-                    index3 = digit
+                if potentialmin < minimum2:
+                    minimum3 = minimum2
+                    minimum2 = potentialmin
+                    index3 = index2
+                    index2 = digit
+                else:
+                    if potentialmin < minimum3:
+                        minimum3 = potentialmin
+                        index3 = digit
     result = index1
     if index2 == index3:
         result = index2
@@ -129,7 +131,7 @@ def read():
         digit = int(line[:1])
         #arr = list(map(lambda x: round(float(x) + 1, 5), line[2:].split(' ')))
         arr = list(map(float, line[2:].split(' ')))
-        foundDigit = n2classifier(arr, trainingdict)
+        foundDigit = n3classifier(arr, trainingdict)
         if digit != foundDigit:
             errors += 1
             errorrate[digit] += 1
