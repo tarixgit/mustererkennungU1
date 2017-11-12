@@ -1,14 +1,14 @@
 from math import *
 from numpy import *
 
-#load the training data by one
-def loadTrain(trainigfolder,digit ):
-    filename = trainigfolder + 'train.' + str(digit)
+#load the data by one
+def loadData(filename):
     file = open(filename, 'r')
     digitarrs = []
     for line in file:
         arr = list(map(float, line.split(',')))
         digitarrs.append(arr)
+    file.close()
     return digitarrs
     
 def getMean(arr):
@@ -67,8 +67,12 @@ def klassifikator(testfilename, trainigfolder, digit1, digit2):
     print("Error for every Digit: ", errors2/all2)
     
 def gda():
-    testfilename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/test/zip.test'
-    trainigfolder = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/training/'
+    filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
+    arr = loadData(filename)
+    np.random.shuffle(arr)
+    train_data = data[:int((len(data) + 1) * .80)]  # Remaining 80% to training set
+    test_data = data[int(len(data) * .80 + 1):]  # Splits 20% data to test set
+
     klassifikator(testfilename, trainigfolder, 3, 5)
     
     
