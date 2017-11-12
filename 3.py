@@ -30,7 +30,7 @@ def getCovMatr(data, mean):
     return cov/len(data)
     
 def getFischerLine(klassetruem, klassefalsem, covklassetrue, covklassefalse):
-    return (covklassetrue + covklassefalse )** (-1)*( klasseturem- klassefalsem)  
+    return (covklassetrue + covklassefalse )** (-1)*(klassetruem - klassefalsem)
     
     #sdfs
  #stdDev = varianz           
@@ -96,8 +96,16 @@ def gda():
     test_data = arr[int(len(arr) * .80 + 1):]  # Splits 20% data to test set
 
     classtrue, classfalse= getclasses(train_data)
-    classtruearr = array(classtrue)
-    classfalsearr = array(classfalse)
+    if len(classtrue) > len(classfalse):
+        classtruenorm = classtrue[:len(classfalse)]
+        classfalsenorm = classfalse
+    else:
+        classfalsenorm = classfalse[:len(classtrue)]
+        classtruenorm = classtrue
+
+
+    classtruearr = array(classtruenorm)
+    classfalsearr = array(classfalsenorm)
 
     classtruem = getMean(classtruearr)
     classfalsem = getMean(classfalsearr)
@@ -108,7 +116,7 @@ def gda():
     covclasstrue = cov(classtruearr)
     covclassfalse = cov(classfalsearr)
 
-
+    fisheralpha = getFischerLine(classtruem, classfalsem, covclasstrue, covclassfalse)
 
     klassifikator(testfilename, trainigfolder, 3, 5)
     
