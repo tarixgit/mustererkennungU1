@@ -28,7 +28,8 @@ def getCovMatr(data, mean):
         cov = cov + (data[i] - mean)*(transpose(data[i] - mean))
     return cov/len(data)
     
-    
+def getFischerLine(klassetruem, klassefalsem, covklassetrue, covklassefalse):
+    return (covklassetrue + covklassefalse )** (-1)*( klasseturem- klassefalsem)  
     
     #sdfs
  #stdDev = varianz           
