@@ -21,7 +21,17 @@ def getSstdDev(digitarrs):
 # def getStdDev(digitarrs):
 #     stdDev= sqrt(sum((digitarrs-getMean(digitarrs))** 2))
 #     return stdDev
+
+def getCovMatr(data, mean):
+    cov = [[]]
+    m = getMean(digitarrs)
+    for i in len(data):
+        cov = cov + (data[i] - mean)*(transpose(data[i] - mean))
+    return cov/len(data)
     
+    
+    
+    #sdfs
  #stdDev = varianz           
 def getProb(mean, stdDev, arr):
     exponent= exp(-(arr- mean)** 2)/(2* (stdDev** 2))
