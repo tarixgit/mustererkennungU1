@@ -12,7 +12,8 @@ def loadData(filename):
     return digitarrs
     
 def getMean(arr):
-    mean= sum(arr)/float(len(digitarrs))
+    sumvector = arr.sum(axis=0)
+    mean= sumvector/float(len(arr))
     return mean
     
 def getSstdDev(digitarrs):
@@ -24,8 +25,8 @@ def getSstdDev(digitarrs):
 
 def getCovMatr(data, mean):
     cov = [[]]
-    for i in len(data):
-        cov = cov + (data[i] - mean)*(transpose(data[i] - mean))
+    for vector in data:
+        cov = cov + (vector - mean) * transpose(vector - mean)
     return cov/len(data)
     
     
@@ -74,21 +75,39 @@ def klassifikator(testfilename, trainigfolder, digit1, digit2):
     print(digit2,":All tests: ", all2)
     print("Count of all errors: ", errors2)
     print("Error for every Digit: ", errors2/all2)
-    
+
+def getclasses(train_data):
+    vectorlen = len(train_data[0])
+    resulttrue = []
+    resultfalse = []
+    for vector in train_data:
+        if vector[vectorlen-1] == 1.0:
+            resulttrue.append(vector[:vectorlen-1])
+        if vector[vectorlen-1] == 0.0:
+            resultfalse.append(vector[:vectorlen-1])
+    return resulttrue, resultfalse
+
 def gda():
     filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
     arr = loadData(filename)
-    np.random.shuffle(arr)
-    train_data = data[:int((len(data) + 1) * .80)]  # Remaining 80% to training set
-    test_data = data[int(len(data) * .80 + 1):]  # Splits 20% data to test set
+    random.shuffle(arr)
+    train_data = arr[:int((len(arr) + 1) * .80)]  # Remaining 80% to training set
+    test_data = arr[int(len(arr) * .80 + 1):]  # Splits 20% data to test set
 
-    klassetrue =
-    klassefalse =
+    classtrue, classfalse= getclasses(train_data)
+    classtruearr = array(classtrue)
+    classfalsearr = array(classfalse)
 
-    klassetruem = getMean(klassetrue)
-    klassefalsem = getMean(klassetrue)
-    covklassetrue = getCovMatr(klassetrue, klassetruem)
-    covklassefalse = getCovMatr(klassefalse, klassefalsem)
+    classtruem = getMean(classtruearr)
+    classfalsem = getMean(classfalsearr)
+
+    #covclasstrue = getCovMatr(classtruearr, classtruem)
+    #covclassfalse = getCovMatr(classfalsearr, classfalsem)
+
+    covclasstrue = cov(classtruearr)
+    covclassfalse = cov(classfalsearr)
+
+
 
     klassifikator(testfilename, trainigfolder, 3, 5)
     
