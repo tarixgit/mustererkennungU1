@@ -24,7 +24,6 @@ def getSstdDev(digitarrs):
 
 def getCovMatr(data, mean):
     cov = [[]]
-    m = getMean(digitarrs)
     for i in len(data):
         cov = cov + (data[i] - mean)*(transpose(data[i] - mean))
     return cov/len(data)
@@ -82,6 +81,14 @@ def gda():
     np.random.shuffle(arr)
     train_data = data[:int((len(data) + 1) * .80)]  # Remaining 80% to training set
     test_data = data[int(len(data) * .80 + 1):]  # Splits 20% data to test set
+
+    klassetrue =
+    klassefalse =
+
+    klassetruem = getMean(klassetrue)
+    klassefalsem = getMean(klassetrue)
+    covklassetrue = getCovMatr(klassetrue, klassetruem)
+    covklassefalse = getCovMatr(klassefalse, klassefalsem)
 
     klassifikator(testfilename, trainigfolder, 3, 5)
     
