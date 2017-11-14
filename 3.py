@@ -36,9 +36,9 @@ def getFischerLine(klassetruem, klassefalsem, covklassetrue, covklassefalse):
     #sdfs
  #stdDev = varianz           
 def getProb(mean, stdDev, arr):
-    exponent= exp(-(array(arr) - array(mean))** 2)/(2* (stdDev** 2))
-    prob=(1/sqrt(2* pi)* stdDev)* exponent
-    return sum(prob)
+    exponent = exp(-(array(arr) - array(mean)) ** 2) / (2 * (stdDev ** 2))
+    prob = (1 / sqrt(2 * pi) * stdDev) * exponent
+    return prob
     
 
 def getclasses(train_data):
@@ -100,8 +100,8 @@ def gda():
     covclasstrue = getCovMatr(classtruearr, classtruem)
     covclassfalse = getCovMatr(classfalsearr, classfalsem)
     fisheralpha = getFischerLine(classtruem, classfalsem, covclasstrue, covclassfalse)
-    classtruem = classtruem * fisheralpha
-    classfalsem = classfalsem * fisheralpha
+    classtruem = matmul(classtruem, fisheralpha)
+    classfalsem = matmul(classfalsem, fisheralpha)
     vartrue = getVariance(classtruearr, classtruem)
     varfalse = getVariance(classfalsearr, classfalsem)
     klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse)
