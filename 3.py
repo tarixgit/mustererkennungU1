@@ -16,6 +16,8 @@ def getMean(arr):
     mean= sumvector/float(len(arr))
     return mean
     
+def getProjection(vektor, alpha):
+    return matmul(vektor, alpha)
 
 def getCovMatr(data, mean):
     cov = zeros((57,57))
@@ -23,11 +25,12 @@ def getCovMatr(data, mean):
         vector.shape=(57,1)
         cov = cov + (vector - mean) * transpose(vector - mean)
     return cov/len(data)
-    
-def getVariance(data, mean):
-    var = zeros((57))
+
+def getVariance(data, mean, alpha):
+    #var = zeros((57))
+    var = 0
     for vector in data:
-        var= var + (vector - mean )**2
+        var= var + (getProjection(vector, alpha) - mean )**2
     return sqrt(var/len(data))
     
 def getFischerLine(klassetruem, klassefalsem, covklassetrue, covklassefalse):
@@ -36,8 +39,8 @@ def getFischerLine(klassetruem, klassefalsem, covklassetrue, covklassefalse):
     #sdfs
  #stdDev = varianz           
 def getProb(mean, stdDev, arr):
-    exponent = exp(-(array(arr) - array(mean)) ** 2) / (2 * (stdDev ** 2))
-    prob = (1 / sqrt(2 * pi) * stdDev) * exponent
+    exponent = exp(-((arr - mean) ** 2) / (2 * (stdDev ** 2)))
+    prob = (1 / (sqrt(2 * pi) * stdDev)) * exponent
     return prob
     
 
@@ -52,15 +55,16 @@ def getclasses(train_data):
             resultfalse.append(vector[:vectorlen-1])
     return resulttrue, resultfalse
     
-def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse):
+def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse, fisheralpha):
     all1 = 0
     all2 = 0
     error1 = 0
     error2 = 0
     classtrue, classfalse= getclasses(test_data)
     for vector in classtrue:
-        ptrue = getProb(classtruem, vartrue, vector)
-        pfalse = getProb(classfalsem, varfalse, vector)
+        projfvector = getProjection(vector, fisheralpha)
+        ptrue = getProb(classtruem, vartrue, projfvector)
+        pfalse = getProb(classfalsem, varfalse, projfvector)
         print(ptrue, pfalse)
         if ptrue >= pfalse:
             all1 += 1
@@ -68,8 +72,9 @@ def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse):
             all1 +=1
             error1 += 1
     for vector in classfalse:
-        ptrue = getProb(classtruem, vartrue, vector)
-        pfalse = getProb(classfalse, varfalse, vector)
+        projfvector = getProjection(vector, fisheralpha)
+        ptrue = getProb(classtruem, vartrue, projfvector)
+        pfalse = getProb(classfalsem, varfalse, projfvector)
         print(ptrue, pfalse)
         if pfalse >= ptrue:
             all2 += 1
@@ -86,7 +91,7 @@ def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse):
 
 def gda():
     filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
-    #filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spamb3ase.data'
+    #filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
     arr = loadData(filename)
     random.shuffle(arr)
     train_data = arr[:int((len(arr) + 1) * .80)]  # Remaining 80% to training set
@@ -100,11 +105,12 @@ def gda():
     covclasstrue = getCovMatr(classtruearr, classtruem)
     covclassfalse = getCovMatr(classfalsearr, classfalsem)
     fisheralpha = getFischerLine(classtruem, classfalsem, covclasstrue, covclassfalse)
-    classtruem = matmul(classtruem, fisheralpha)
-    classfalsem = matmul(classfalsem, fisheralpha)
-    vartrue = getVariance(classtruearr, classtruem)
-    varfalse = getVariance(classfalsearr, classfalsem)
-    klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse)
+
+    classtruem = getProjection(classtruem, fisheralpha)
+    classfalsem = getProjection(classfalsem, fisheralpha)
+    vartrue = getVariance(classtruearr, classtruem, fisheralpha)
+    varfalse = getVariance(classfalsearr, classfalsem, fisheralpha)
+    klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse, fisheralpha)
     
     
 gda()
