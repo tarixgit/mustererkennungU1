@@ -37,7 +37,8 @@ def getVariance(data, mean):
     return var/len(data)
     
 def getFischerLine(klassetruem, klassefalsem, covklassetrue, covklassefalse):
-    return (covklassetrue + covklassefalse )** (-1)*(klassetruem - klassefalsem)
+    fischerline = matmul((covklassetrue + covklassefalse) ** (-1), (klassetruem - klassefalsem))
+    return fischerline
     
     #sdfs
  #stdDev = varianz           
@@ -99,8 +100,8 @@ def klassifikator():
     return 0
 
 def gda():
-    filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
-    #filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spamb3ase.data'
+    #filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
+    filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
     arr = loadData(filename)
     random.shuffle(arr)
     train_data = arr[:int((len(arr) + 1) * .80)]  # Remaining 80% to training set
@@ -123,9 +124,6 @@ def gda():
 
     classtruem = getMean(classtruearr)
     classfalsem = getMean(classfalsearr)
-
-    #covclasstrue = getCovMatr(classtruearr, classtruem)
-    #covclassfalse = getCovMatr(classfalsearr, classfalsem)
 
     covclasstrue = getCovMatr(classtruearr, classtruem)
     covclassfalse = getCovMatr(classfalsearr, classfalsem)
