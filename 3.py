@@ -34,10 +34,10 @@ def getVariance(data, mean):
     var = zeros((57))
     for vector in data:
         var= var + (vector - mean )**2
-    return sqrt(var/len(data))
+    return var/len(data)
     
 def getFischerLine(klassetruem, klassefalsem, covklassetrue, covklassefalse):
-    return (covklassetrue + covklassefalse )** (-1)*(klassetruem - klassefalsem)
+    return matmul((covklassetrue + covklassefalse )** (-1), (klassetruem - klassefalsem))
     
     #sdfs
  #stdDev = varianz           
