@@ -34,16 +34,16 @@ def getVariance(data, mean):
     var = zeros((57))
     for vector in data:
         var= var + (vector - mean )**2
-    return var/len(data)
+    return sqrt(var/len(data))
     
 def getFischerLine(klassetruem, klassefalsem, covklassetrue, covklassefalse):
-    fischerline = matmul((covklassetrue + covklassefalse) ** (-1), (klassetruem - klassefalsem))
-    return fischerline
+    return (covklassetrue + covklassefalse )** (-1)*(klassetruem - klassefalsem)
     
     #sdfs
  #stdDev = varianz           
 def getProb(mean, stdDev, arr):
-    exponent= exp(-(arr- mean)** 2)/(2* (stdDev** 2))
+    print(shape(mean),shape(stdDev),shape(arr))
+    exponent= exp(-(array(arr) - array(mean))** 2)/(2* (stdDev** 2))
     prob=(1/sqrt(2* pi)* stdDev)* exponent
     return prob
     
@@ -96,12 +96,39 @@ def getclasses(train_data):
             resultfalse.append(vector[:vectorlen-1])
     return resulttrue, resultfalse
     
-def klassifikator():
+def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse):
+    all1 = 0
+    all2 = 0
+    error1 = 0
+    error2 = 0
+    classtrue, classfalse= getclasses(test_data)
+    for vector in classtrue:
+        ptrue = getProb(classtruem, vartrue, vector)
+        pfalse = getProb(classfalsem, varfalse, vector)
+        if ptrue >= pfalse:
+            all1 += 1
+        else:
+            all1 +=1
+            error1 += 1
+    for vector in classfalse:
+        ptrue = getProb(classtruem, vartrue, vector)
+        pfalse = getprob(classfalse, varfalse, vector)
+        if pfalse >= ptrue:
+            all2 += 1
+        else:
+            all2 +=1
+            error2 += 1
+    print("0 :All tests: ", all1)
+    print("Count of all errors: ", errors1)
+    print("Error for every Digit: ", errors1/all1)
+    print("1 :All tests: ", all2)
+    print("Count of all errors: ", errors2)
+    print("Error for every Digit: ", errors2/all2)
     return 0
 
 def gda():
-    #filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
-    filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
+    filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
+    #filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spamb3ase.data'
     arr = loadData(filename)
     random.shuffle(arr)
     train_data = arr[:int((len(arr) + 1) * .80)]  # Remaining 80% to training set
@@ -125,6 +152,9 @@ def gda():
     classtruem = getMean(classtruearr)
     classfalsem = getMean(classfalsearr)
 
+    #covclasstrue = getCovMatr(classtruearr, classtruem)
+    #covclassfalse = getCovMatr(classfalsearr, classfalsem)
+
     covclasstrue = getCovMatr(classtruearr, classtruem)
     covclassfalse = getCovMatr(classfalsearr, classfalsem)
     
@@ -134,7 +164,8 @@ def gda():
     classfalsem = classfalsem * fisheralpha
     vartrue = getVariance(classtruearr, classtruem)
     varfalse = getVariance(classfalsearr, classfalsem)
-    # klassifikator(testfilename, trainigfolder, 3, 5)
+    print(shape(classtruem),shape(vartrue))
+    klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse)
     
     
 gda()
