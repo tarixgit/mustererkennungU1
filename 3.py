@@ -24,8 +24,9 @@ def getSstdDev(digitarrs):
 #     return stdDev
 
 def getCovMatr(data, mean):
-    cov = [[]]
+    cov = zeros((57,57))
     for vector in data:
+        vector.shape=(57,1)
         cov = cov + (vector - mean) * transpose(vector - mean)
     return cov/len(data)
     
@@ -89,23 +90,27 @@ def getclasses(train_data):
     return resulttrue, resultfalse
 
 def gda():
-    filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
+    filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
+    #filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spamb3ase.data'
     arr = loadData(filename)
     random.shuffle(arr)
     train_data = arr[:int((len(arr) + 1) * .80)]  # Remaining 80% to training set
     test_data = arr[int(len(arr) * .80 + 1):]  # Splits 20% data to test set
 
     classtrue, classfalse= getclasses(train_data)
-    if len(classtrue) > len(classfalse):
-        classtruenorm = classtrue[:len(classfalse)]
-        classfalsenorm = classfalse
-    else:
-        classfalsenorm = classfalse[:len(classtrue)]
-        classtruenorm = classtrue
+    # if len(classtrue) > len(classfalse):
+    #     classtruenorm = classtrue[:len(classfalse)]
+    #     classfalsenorm = classfalse
+    # else:
+    #     classfalsenorm = classfalse[:len(classtrue)]
+    #     classtruenorm = classtrue
+    #     
 
-
-    classtruearr = array(classtruenorm)
-    classfalsearr = array(classfalsenorm)
+    # classtruearr = array(classtruenorm)
+    # classfalsearr = array(classfalsenorm)
+    
+    classtruearr = array(classtrue)
+    classfalsearr = array(classfalse)
 
     classtruem = getMean(classtruearr)
     classfalsem = getMean(classfalsearr)
@@ -113,12 +118,12 @@ def gda():
     #covclasstrue = getCovMatr(classtruearr, classtruem)
     #covclassfalse = getCovMatr(classfalsearr, classfalsem)
 
-    covclasstrue = cov(classtruearr)
-    covclassfalse = cov(classfalsearr)
+    covclasstrue = getCovMatr(classtruearr, classtruem)
+    covclassfalse = getCovMatr(classfalsearr, classfalsem)
 
     fisheralpha = getFischerLine(classtruem, classfalsem, covclasstrue, covclassfalse)
-
-    klassifikator(testfilename, trainigfolder, 3, 5)
+    print(shape(fisheralpha))
+    # klassifikator(testfilename, trainigfolder, 3, 5)
     
     
 gda()
