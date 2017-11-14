@@ -15,7 +15,14 @@ def getMean(arr):
     sumvector = arr.sum(axis=0)
     mean= sumvector/float(len(arr))
     return mean
-    
+
+def getProjMean(arr, fisheralpha):
+    sum = 0
+    for vector in arr:
+        num = getProjection(vector, fisheralpha)
+        sum += num
+    return sum/len(arr)
+
 def getProjection(vektor, alpha):
     return matmul(vektor, alpha)
 
@@ -84,14 +91,16 @@ def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse, fishera
     print("0 :All tests: ", all1)
     print("Count of all errors: ", error1)
     print("Error for every Digit: ", error1/all1)
+    print("Success: ", (1 - error1 / all1))
     print("1 :All tests: ", all2)
     print("Count of all errors: ", error2)
     print("Error for every Digit: ", error2/all2)
+    print("Success: ", (1 - error2/all2))
     return 0
 
 def gda():
-    filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
-    #filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
+    #filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
+    filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
     arr = loadData(filename)
     random.shuffle(arr)
     train_data = arr[:int((len(arr) + 1) * .80)]  # Remaining 80% to training set
@@ -102,9 +111,16 @@ def gda():
     classfalsearr = array(classfalse)
     classtruem = getMean(classtruearr)
     classfalsem = getMean(classfalsearr)
-    covclasstrue = getCovMatr(classtruearr, classtruem)
-    covclassfalse = getCovMatr(classfalsearr, classfalsem)
+    #covclasstrue = getCovMatr(classtruearr, classtruem)
+    #covclassfalse = getCovMatr(classfalsearr, classfalsem)
+
+    covclasstrue = cov(transpose(classtruearr))
+    covclassfalse = cov(transpose(classfalsearr))
+
     fisheralpha = getFischerLine(classtruem, classfalsem, covclasstrue, covclassfalse)
+
+    #classtruemP = getProjMean(classtruearr, fisheralpha)
+    #classfalsemP = getProjMean(classfalsearr, fisheralpha)
 
     classtruem = getProjection(classtruem, fisheralpha)
     classfalsem = getProjection(classfalsem, fisheralpha)
