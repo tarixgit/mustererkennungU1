@@ -3,6 +3,16 @@ from numpy import *
 import matplotlib.pyplot as plt
 
 
+class Cluster:
+
+    #kind = 'canine'         # class variable shared by all instances
+
+    #covariance = cov
+    def __init__(self, arr, cov, center):
+        self.arr = arr
+        self.cov = cov
+        self.center = center
+
 # load the data by one
 def loadData(filename):
     file = open(filename, 'r')
@@ -18,6 +28,7 @@ def getProb(mean, stdDev, arr):
     prob = (1 / (sqrt(2 * pi) * stdDev)) * exponent
     return prob
 
+#not used more
 def getFirstMeans(numberofcluster, arr):
     numberOfVector = len(arr)
     means = array([])
@@ -30,8 +41,11 @@ def distance(vektor, mean, cov):
     distance = (vektor - mean) * (1 / cov) * (vektor - mean)
     return distance
 
-def splittedInCluster(arr, covariances, means):
-    numberofcluster = len(means)
+def splittedInCluster(arr, clusters):
+    numberofcluster = len(clusters)
+    vectorlen = len(arr[0])
+    clusters = [] #list of cluster objects
+    # if means_before != means:
     for vector in arr:
         distances = array([])
         for i in len(mean):
@@ -41,29 +55,39 @@ def splittedInCluster(arr, covariances, means):
         clusterAssignIndex = argmin(distances)
         clusters[clusterAssignIndex].append(vector)
 
-    return
+    return clusters;
 
-
+#not used more
 def getFirstCovariances(numberofcluster):
     x = array([])
     for i in range(numberofcluster):
         x.append(identity())
     return x
 
+def initalizeClusters(numberofcluster, arr):
+    numberOfVector = len(arr) # for random
+    clusters = []
+    for i in range(numberofcluster):
+        r = random.randint(1, numberOfVector)
+        mean = arr[r]
+        cov = identity()
+        cluster = Cluster(array([]), cov, mean)
+        clusters.append(cluster)
+    return clusters
+
 def clustering(arr):
     len = len(arr)
+    #maybe to change the loop to elbogen method, where you dont stop until you broder (x/y == 1) overcomme
     for numberofcluster  in range(2, 10):
+        # fuer jeder cluster
+        # 1) cluster finded
+        # 2) covarianz bekommen und Guete berechnen
 
-        means = getFirstMeans(numberofcluster, arr)
-        covariances = getFirstCovariances()
-        splittedClusterData = splittedInCluster(arr, covariances, means)
 
-        for i in range(numberofcluster):
-            x = random.randint(1, len)
-            means.append(arr[x])
+        clusters = initalizeClusters(numberofcluster, arr)
 
-            covariance = identity()
-            findmean()
+        clusters = splittedInCluster(arr, clusters) #renew
+
 
 def k_means():
     # filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
