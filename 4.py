@@ -40,6 +40,9 @@ def clustering(arr):
             covariance = identity()
             findmean()
 
+def distance(vektor, mean, cov):
+    distance = (vektor - mean) * (1 / cov) * (vektor - mean)
+    return distance
 
 def k_means():
     # filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
