@@ -65,6 +65,13 @@ def clustering(arr):
             covariance = identity()
             findmean()
 
+def guete(covArr):
+    guete[]
+    for i in range(covArr.shape[0]):
+        guete.append(linalg.norm(covArr[i]))
+        #guete.append(linalg.norm(covArr[i], inf))
+    return guete
+
 def k_means():
     # filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
     #filename = '~/PycharmProjects/mustererkennungU1/datasource/spambase.data'
