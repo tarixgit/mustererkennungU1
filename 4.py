@@ -26,12 +26,37 @@ def getFirstMeans(numberofcluster, arr):
         means.append(arr[x])
     return means
 
+def distance(vektor, mean, cov):
+    distance = (vektor - mean) * (1 / cov) * (vektor - mean)
+    return distance
+
+def splittedInCluster(arr, covariances, means):
+    numberofcluster = len(means)
+    for vector in arr:
+        distances = array([])
+        for i in len(mean):
+            cov = covariances[i]
+            mean = means[i]
+            distances.append(distance(vector, mean, cov))
+        clusterAssignIndex = argmin(distances)
+        clusters[clusterAssignIndex].append(vector)
+
+    return
+
+
+def getFirstCovariances(numberofcluster):
+    x = array([])
+    for i in range(numberofcluster):
+        x.append(identity())
+    return x
+
 def clustering(arr):
     len = len(arr)
-    for numberofcluster in range(10):
+    for numberofcluster  in range(2, 10):
 
         means = getFirstMeans(numberofcluster, arr)
-        covariance = identity()
+        covariances = getFirstCovariances()
+        splittedClusterData = splittedInCluster(arr, covariances, means)
 
         for i in range(numberofcluster):
             x = random.randint(1, len)
@@ -39,10 +64,6 @@ def clustering(arr):
 
             covariance = identity()
             findmean()
-
-def distance(vektor, mean, cov):
-    distance = (vektor - mean) * (1 / cov) * (vektor - mean)
-    return distance
 
 def k_means():
     # filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
