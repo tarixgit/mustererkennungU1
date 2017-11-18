@@ -39,7 +39,13 @@ def getFirstMeans(numberofcluster, arr):
     return means
 
 def distance(vektor, center, cov):
-    distance = (vektor - center) * (1 / cov) * (vektor - center)
+    dif = vektor - center
+    #dif.shape = (len(dif), 1)
+    if array_equal(cov, identity(2)):
+        mult = dif
+    else:
+        mult = matmul(dif, cov ** (-1))
+    distance = matmul(mult, (vektor - center))
     return distance
 
 def checkifthesame(clusters):
@@ -68,7 +74,10 @@ def splittedInCluster(arr, clusters):
             for i in range(numberofcluster):
                 distances.append(distance(vector, clusters[i].mean, clusters[i].cov))
             cluster_assign_index = argmin(distances)
-            clusters[cluster_assign_index].arr.append(vector)
+            if clusters[cluster_assign_index].arr = [] :
+                clusters[cluster_assign_index].arr = array(vector, ...)
+            else:
+                clusters[cluster_assign_index].arr.append(vector)
         same = checkifthesame(clusters)
         notsame = not same
 #to test
@@ -87,8 +96,8 @@ def initalizeClusters(numberofcluster, arr):
     for i in range(numberofcluster):
         r = random.randint(1, numberOfVector)
         mean = arr[r]
-        cov = identity(2, float)
-        cluster = Cluster(array([]), cov, mean)
+        cov = identity(2)
+        cluster = Cluster([], cov, mean)
         clusters.append(cluster)
     return clusters
 
