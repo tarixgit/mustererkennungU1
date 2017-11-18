@@ -11,7 +11,7 @@ class Cluster:
     def __init__(self, arr, cov, center):
         self.arr = arr
         self.cov = cov      #old covevrgance, from cluster before
-        self.center = center
+        self.mean = mean
 
 # load the data by one
 def loadData(filename):
@@ -37,8 +37,8 @@ def getFirstMeans(numberofcluster, arr):
         means.append(arr[x])
     return means
 
-def distance(vektor, mean, cov):
-    distance = (vektor - mean) * (1 / cov) * (vektor - mean)
+def distance(vektor, meanOne, cov):
+    distance = (vektor - meanOne) * (1 / cov) * (vektor - meanOne)
     return distance
 
 def checkifthesame(clusters):
@@ -50,12 +50,14 @@ def splittedInCluster(arr, clusters):
     same = True
     while same:
         for vector in arr:
-            distances = array([])
+            distances = []
             for i in range(numberofcluster):
                 distances.append(distance(vector, clusters[i].mean, clusters[i].cov))
+                #distance(vector, clusters[i].mean, clusters[i].cov)
+                #vstack(distances, distance(vector, clusters[i].mean, clusters[i].cov))
             cluster_assign_index = argmin(distances)
             clusters[cluster_assign_index].arr.append(vector)
-        same = checkifthesame(clusters)
+        #same = checkifthesame(clusters)
 
     return clusters
 
@@ -72,13 +74,13 @@ def initalizeClusters(numberofcluster, arr):
     for i in range(numberofcluster):
         r = random.randint(1, numberOfVector)
         mean = arr[r]
-        cov = identity()
+        cov = identity(2, float)
         cluster = Cluster(array([]), cov, mean)
         clusters.append(cluster)
     return clusters
 
 def clustering(arr):
-    len = len(arr)
+    length = len(arr)
     #maybe to change the loop to elbogen method, where you dont stop until you broder (x/y == 1) overcomme
     for numberofcluster  in range(2, 10):
         # fuer jeder cluster
