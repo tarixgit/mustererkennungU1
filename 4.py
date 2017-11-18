@@ -66,7 +66,6 @@ def clustering(arr):
             findmean()
 
 def guete(covArr):
-    guete[]
     for i in range(covArr.shape[0]):
         guete.append(linalg.norm(covArr[i]))
         #guete.append(linalg.norm(covArr[i], inf))
