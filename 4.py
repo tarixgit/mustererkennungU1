@@ -53,9 +53,13 @@ def checkifthesame(clusters):
     #what if some cluster doesn't have points(arr is empty)?
     for cluster in clusters:
         old_mean = cluster.mean
-        cluster.mean = mean(cluster.arr) #check if this work, maybe wrong achse
+        cluster.mean = mean(cluster.arr, axis=0) #check if this work, maybe wrong achse
         cluster.cov = cov(transpose(cluster.arr))  ## must I to transpose????
-        if not array_equal(cluster.mean, old_mean):   ## to change with threshold, i suppose it must be not directly same
+        #th next line is only for test
+        old_mean = trunc(old_mean * 100)
+        mmean = trunc(cluster.mean * 100)
+        if not array_equal(mmean, old_mean):
+        #if not array_equal(cluster.mean, old_mean):   ## to change with threshold, i suppose it must be not directly same
             same = False
     return same
 
