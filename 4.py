@@ -18,11 +18,28 @@ def getProb(mean, stdDev, arr):
     prob = (1 / (sqrt(2 * pi) * stdDev)) * exponent
     return prob
 
+def getFirstMeans(numberofcluster, arr):
+    numberOfVector = len(arr)
+    means = array([])
+    for i in range(numberofcluster):
+        x = random.randint(1, numberOfVector)
+        means.append(arr[x])
+    return means
+
 def clustering(arr):
+    len = len(arr)
     for numberofcluster in range(10):
+
+        means = getFirstMeans(numberofcluster, arr)
+        covariance = identity()
+
         for i in range(numberofcluster):
+            x = random.randint(1, len)
+            means.append(arr[x])
+
             covariance = identity()
             findmean()
+
 
 def k_means():
     # filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
