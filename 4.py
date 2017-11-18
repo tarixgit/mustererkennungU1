@@ -74,8 +74,8 @@ def splittedInCluster(arr, clusters):
             for i in range(numberofcluster):
                 distances.append(distance(vector, clusters[i].mean, clusters[i].cov))
             cluster_assign_index = argmin(distances)
-            if clusters[cluster_assign_index].arr = [] :
-                clusters[cluster_assign_index].arr = array(vector, ...)
+            if clusters[cluster_assign_index].arr == []:
+                clusters[cluster_assign_index].arr = array(vector, ndmin=2)
             else:
                 clusters[cluster_assign_index].arr.append(vector)
         same = checkifthesame(clusters)
