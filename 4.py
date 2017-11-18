@@ -41,6 +41,9 @@ def distance(vektor, mean, cov):
     distance = (vektor - mean) * (1 / cov) * (vektor - mean)
     return distance
 
+def checkifthesame(clusters):
+    return
+
 def splittedInCluster(arr, clusters):
     numberofcluster = len(clusters)
     # if means_before != means:
@@ -52,7 +55,7 @@ def splittedInCluster(arr, clusters):
                 distances.append(distance(vector, clusters[i].mean, clusters[i].cov))
             cluster_assign_index = argmin(distances)
             clusters[cluster_assign_index].arr.append(vector)
-        same = checkifthesame(cluster)
+        same = checkifthesame(clusters)
 
     return clusters
 
