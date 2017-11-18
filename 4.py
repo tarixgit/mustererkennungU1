@@ -18,18 +18,25 @@ def getProb(mean, stdDev, arr):
     prob = (1 / (sqrt(2 * pi) * stdDev)) * exponent
     return prob
 
-def gda():
+def clustering(arr):
+    for numberofcluster in range(10):
+        for i in range(numberofcluster):
+            covariance = identity()
+            findmean()
+
+def k_means():
     # filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
     #filename = '~/PycharmProjects/mustererkennungU1/datasource/spambase.data'
     filename = './datasource/2d-em.csv'
-    arr = loadData(filename)
-
+    lists = loadData(filename)
+    arr = array(lists)
+    clustering(arr)
 
     #plt.plot(a)
     #plt.show()
 
 
-gda()
+k_means()
 
 # import sklearn
 # train_test_split
