@@ -49,11 +49,9 @@ def splittedInCluster(arr, clusters):
     for vector in arr:
         distances = array([])
         for i in range(numberofcluster):
-            cov = clusters[i]
-            mean = clusters[i]
-            distances.append(distance(vector, mean, cov))
+            distances.append(distance(vector, clusters[i].mean, clusters[i].cov))
         clusterAssignIndex = argmin(distances)
-        clusters[clusterAssignIndex].append(vector)
+        clusters[clusterAssignIndex].arr.append(vector)
 
     return clusters;
 
