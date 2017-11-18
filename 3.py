@@ -1,5 +1,6 @@
 from math import *
 from numpy import *
+import matplotlib.pyplot as plt
 
 #load the data by one
 def loadData(filename):
@@ -68,6 +69,10 @@ def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse, fishera
     error1 = 0
     error2 = 0
     classtrue, classfalse= getclasses(test_data)
+    x = []
+    y = []
+    x2 = []
+    y2 = []
     for vector in classtrue:
         projfvector = getProjection(vector, fisheralpha)
         ptrue = getProb(classtruem, vartrue, projfvector)
@@ -78,6 +83,8 @@ def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse, fishera
         else:
             all1 +=1
             error1 += 1
+        y.append(ptrue)
+        x.append(projfvector)
     for vector in classfalse:
         projfvector = getProjection(vector, fisheralpha)
         ptrue = getProb(classtruem, vartrue, projfvector)
@@ -88,6 +95,8 @@ def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse, fishera
         else:
             all2 +=1
             error2 += 1
+        y2.append(pfalse)
+        x2.append(projfvector)
     print("0 :All tests: ", all1)
     print("Count of all errors: ", error1)
     print("Error for every Digit: ", error1/all1)
@@ -96,7 +105,20 @@ def klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse, fishera
     print("Count of all errors: ", error2)
     print("Error for every Digit: ", error2/all2)
     print("Success: ", (1 - error2/all2))
+    plt.plot(x, y, 'r+', x2, y2, 'g+')
+    plt.show()
     return 0
+
+def plotFunctions(classtrue, classflase, alpha):
+    resarr1 = []
+    resarr2 = []
+    for vector in classtrue:
+        resarr1.append(getProjection(vector, alpha))
+
+    for vector in classflase:
+        resarr2.append(getProjection(vector, alpha))
+
+    return resarr1, resarr2
 
 def gda():
     #filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
@@ -127,9 +149,16 @@ def gda():
     vartrue = getVariance(classtruearr, classtruem, fisheralpha)
     varfalse = getVariance(classfalsearr, classfalsem, fisheralpha)
     klassifikator(test_data, classtruem, classfalsem, vartrue, varfalse, fisheralpha)
-    
+    a, b = plotFunctions(classtruearr, classfalsearr, fisheralpha)
+    #plt.plot(a, , color="green", b, , color="green")
+    plt.plot(a)
+    #plt.plot.acorr()
+    plt.show()
     
 gda()
+
+#import sklearn
+#train_test_split
     
     
     
