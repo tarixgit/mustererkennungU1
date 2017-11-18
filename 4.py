@@ -37,8 +37,8 @@ def getFirstMeans(numberofcluster, arr):
         means.append(arr[x])
     return means
 
-def distance(vektor, mean, cov):
-    distance = (vektor - mean) * (1 / cov) * (vektor - mean)
+def distance(vektor, meanOne, cov):
+    distance = (vektor - meanOne) * (1 / cov) * (vektor - meanOne)
     return distance
 
 def checkifthesame(clusters):
@@ -60,10 +60,10 @@ def checkifthesame(clusters):
 def splittedInCluster(arr, clusters):
     numberofcluster = len(clusters)
     # if means_before != means:
-    notsame = True
-    while notsame:
+    same = True
+    while same:
         for vector in arr:
-            distances = array([])
+            distances = []
             for i in range(numberofcluster):
                 distances.append(distance(vector, clusters[i].mean, clusters[i].cov))
             cluster_assign_index = argmin(distances)
@@ -86,13 +86,13 @@ def initalizeClusters(numberofcluster, arr):
     for i in range(numberofcluster):
         r = random.randint(1, numberOfVector)
         mean = arr[r]
-        cov = identity()
+        cov = identity(2, float)
         cluster = Cluster(array([]), cov, mean)
         clusters.append(cluster)
     return clusters
 
 def clustering(arr):
-    len = len(arr)
+    length = len(arr)
     #maybe to change the loop to elbogen method, where you dont stop until you broder (x/y == 1) overcomme
     for numberofcluster  in range(2, 10):
         # fuer jeder cluster
