@@ -42,13 +42,26 @@ def distance(vektor, mean, cov):
     return distance
 
 def checkifthesame(clusters):
-    return
+    same = True
+    #what if some cluster doesn't have points(arr is empty)?
+    for cluster in clusters:
+        old_mean = cluster.mean
+        old_cov = cluster.cov
+        cluster.mean = mean(cluster.arr) #check if this work, maybe wrong achse
+        cluster.cov = cov(cluster.arr)  ## must I to transpose????
+        if cluster.mean != old_mean:   ## to change with threshold, i suppose it must be not directly same
+            same = False
+            break
+        if cluster.cov != old_cov:   ## to change with threshold, i suppose it must be not directly same
+            same = False
+            break
+    return same
 
 def splittedInCluster(arr, clusters):
     numberofcluster = len(clusters)
     # if means_before != means:
-    same = True
-    while same:
+    notsame = True
+    while notsame:
         for vector in arr:
             distances = array([])
             for i in range(numberofcluster):
@@ -56,7 +69,8 @@ def splittedInCluster(arr, clusters):
             cluster_assign_index = argmin(distances)
             clusters[cluster_assign_index].arr.append(vector)
         same = checkifthesame(clusters)
-
+        notsame = not same
+#to test
     return clusters
 
 #not used more
