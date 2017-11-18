@@ -43,17 +43,18 @@ def distance(vektor, mean, cov):
 
 def splittedInCluster(arr, clusters):
     numberofcluster = len(clusters)
-    vectorlen = len(arr[0])
-    clusters = [] #list of cluster objects
     # if means_before != means:
-    for vector in arr:
-        distances = array([])
-        for i in range(numberofcluster):
-            distances.append(distance(vector, clusters[i].mean, clusters[i].cov))
-        clusterAssignIndex = argmin(distances)
-        clusters[clusterAssignIndex].arr.append(vector)
+    same = True
+    while same:
+        for vector in arr:
+            distances = array([])
+            for i in range(numberofcluster):
+                distances.append(distance(vector, clusters[i].mean, clusters[i].cov))
+            cluster_assign_index = argmin(distances)
+            clusters[cluster_assign_index].arr.append(vector)
+        same = checkifthesame(cluster)
 
-    return clusters;
+    return clusters
 
 #not used more
 def getFirstCovariances(numberofcluster):
@@ -83,8 +84,7 @@ def clustering(arr):
 
 
         clusters = initalizeClusters(numberofcluster, arr)
-
-        clusters = splittedInCluster(arr, clusters) #renew
+        clustersnew = splittedInCluster(arr, clusters) #renew
 
 
 def guete(covArr):
