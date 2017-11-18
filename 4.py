@@ -55,7 +55,7 @@ def checkifthesame(clusters):
         old_mean = cluster.mean
         cluster.mean = mean(cluster.arr, axis=0) #check if this work, maybe wrong achse
         cluster.cov = cov(transpose(cluster.arr))  ## must I to transpose????
-        #th next line is only for test
+        #th next 3 line is only for test, you can remove it
         old_mean = trunc(old_mean * 100)
         mmean = trunc(cluster.mean * 100)
         if not array_equal(mmean, old_mean):
