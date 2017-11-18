@@ -13,27 +13,6 @@ def loadData(filename):
     file.close()
     return digitarrs
 
-
-
-
-def getProjection(vektor, alpha):
-    return matmul(vektor, alpha)
-
-def getVariance(data, mean, alpha):
-    # var = zeros((57))
-    var = 0
-    for vector in data:
-        var = var + (getProjection(vector, alpha) - mean) ** 2
-    return sqrt(var / len(data))
-
-
-def getFischerLine(klassetruem, klassefalsem, covklassetrue, covklassefalse):
-    return matmul((covklassetrue + covklassefalse) ** (-1), (klassetruem - klassefalsem))
-
-    # sdfs
-    # stdDev = varianz
-
-
 def getProb(mean, stdDev, arr):
     exponent = exp(-((arr - mean) ** 2) / (2 * (stdDev ** 2)))
     prob = (1 / (sqrt(2 * pi) * stdDev)) * exponent
@@ -41,7 +20,8 @@ def getProb(mean, stdDev, arr):
 
 def gda():
     # filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
-    filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
+    #filename = '~/PycharmProjects/mustererkennungU1/datasource/spambase.data'
+    filename = './datasource/2d-em.csv'
     arr = loadData(filename)
 
 
