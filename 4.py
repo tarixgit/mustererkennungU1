@@ -8,10 +8,10 @@ class Cluster:
     #cov = 'canine'         # class variable shared by all instances
 
     #covariance = cov
-    def __init__(self, arr, cov, center):
+    def __init__(self, arr, cov, mean):
         self.arr = arr
         self.cov = cov      #old covevrgance, from cluster before
-        self.center = center
+        self.mean = mean
 
 # load the data by one
 def loadData(filename):
@@ -23,6 +23,7 @@ def loadData(filename):
     file.close()
     return digitarrs
 
+#not used
 def getProb(mean, stdDev, arr):
     exponent = exp(-((arr - mean) ** 2) / (2 * (stdDev ** 2)))
     prob = (1 / (sqrt(2 * pi) * stdDev)) * exponent
@@ -37,8 +38,8 @@ def getFirstMeans(numberofcluster, arr):
         means.append(arr[x])
     return means
 
-def distance(vektor, meanOne, cov):
-    distance = (vektor - meanOne) * (1 / cov) * (vektor - meanOne)
+def distance(vektor, center, cov):
+    distance = (vektor - center) * (1 / cov) * (vektor - center)
     return distance
 
 def checkifthesame(clusters):
