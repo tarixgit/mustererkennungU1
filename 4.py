@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 
 class Cluster:
 
-    #kind = 'canine'         # class variable shared by all instances
+    #cov = 'canine'         # class variable shared by all instances
 
     #covariance = cov
     def __init__(self, arr, cov, center):
         self.arr = arr
-        self.cov = cov
+        self.cov = cov      #old covevrgance, from cluster before
         self.center = center
 
 # load the data by one
@@ -48,9 +48,9 @@ def splittedInCluster(arr, clusters):
     # if means_before != means:
     for vector in arr:
         distances = array([])
-        for i in len(mean):
-            cov = covariances[i]
-            mean = means[i]
+        for i in range(numberofcluster):
+            cov = clusters[i]
+            mean = clusters[i]
             distances.append(distance(vector, mean, cov))
         clusterAssignIndex = argmin(distances)
         clusters[clusterAssignIndex].append(vector)
