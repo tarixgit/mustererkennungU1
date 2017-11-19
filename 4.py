@@ -55,12 +55,6 @@ def checkifthesame(clusters):
         old_mean = cluster.mean
         cluster.mean = mean(cluster.arr, axis=0) #check if this work, maybe wrong achse
         cluster.cov = cov(transpose(cluster.arr))  ## must I to transpose????
-        #th next 3 line is only for test, you can remove it
-        old_mean = trunc(old_mean * 100)
-        mmean = trunc(cluster.mean * 100)
-        if not array_equal(mmean, old_mean):
-        #if not array_equal(cluster.mean, old_mean):   ## to change with threshold, i suppose it must be not directly same
-            same = False
     return same
 
 def splittedInCluster(arr, clusters):
@@ -100,35 +94,92 @@ def initalizeClusters(numberofcluster, arr):
         clusters.append(cluster)
     return clusters
 
-def clustering(arr):
-    length = len(arr)
+def clustering(arr, numberofcluster):
     #maybe to change the loop to elbogen method, where you dont stop until you broder (x/y == 1) overcomme
-    for numberofcluster  in range(2, 10):
+    #for numberofcluster  in range(2, 10):
         # fuer jeder cluster
         # 1) cluster finded
         # 2) covarianz bekommen und Guete berechnen
+    clusters = initalizeClusters(numberofcluster, arr)
+    clustersnew = splittedInCluster(arr, clusters) #renew
+    return clustersnew
 
 
-        clusters = initalizeClusters(numberofcluster, arr)
-        clustersnew = splittedInCluster(arr, clusters) #renew
-
-
-def guete(covArr):
-    for i in range(covArr.shape[0]):
-        guete.append(linalg.norm(covArr[i]))
-        #guete.append(linalg.norm(covArr[i], inf))
+def guete(clusters):
+    guete = 0
+    for i in range(len(clusters)):
+        guete += linalg.norm(clusters[i].cov, inf)
     return guete
 
+def poltguete(guete, clusters):
+    x = []
+    y = []
+    for i in range(len(guete)):
+        x.append(i+2)
+        y.append(guete[i])
+    plt.figure(figsize=(15, 10))
+    plt.subplot(2, 2, 1)
+    plt.plot(x, y)
+    plt.subplot(2, 2, 2)
+    a, b = zip(*clusters[0].arr)
+    plt.scatter(a, b, color="blue", edgecolors="black")
+    a, b = zip(*clusters[1].arr)
+    plt.scatter(a, b, color="green", edgecolors="black")
+    a, b = zip(*clusters[2].arr)
+    plt.scatter(a, b, color="black", edgecolors="black")
+    a, b = zip(*clusters[3].arr)
+    plt.scatter(a, b, color="pink", edgecolors="black")
+    a, b = zip(*clusters[4].arr)
+    plt.scatter(a, b, color="red", edgecolors="black")
+    a, b = zip(*clusters[5].arr)
+    plt.scatter(a, b, color="yellow", edgecolors="black")
+    a, b = zip(*clusters[6].arr)
+    plt.scatter(a, b, color="orange", edgecolors="black")
+    a, b = zip(*clusters[7].arr)
+    plt.scatter(a, b, color="gray", edgecolors="black")
+    a, b = zip(*clusters[8].arr)
+    plt.scatter(a, b, color="brown", edgecolors="black")
+
+    plt.subplot(2, 2, 3)
+    num_points = 1000
+    radius = 1
+    arcs = linspace(0, 2 * pi, num_points)
+    x = radius * sin(arcs)
+    y = radius * cos(arcs)
+    xy = array(list(zip(x, y)))
+    x, y = zip(*xy.dot(clusters[0].cov))
+    plt.plot(x, y)
+    x, y = zip(*xy.dot(clusters[2].cov))
+    plt.plot(x, y)
+    x, y = zip(*xy.dot(clusters[3].cov))
+    plt.plot(x, y)
+    x, y = zip(*xy.dot(clusters[4].cov))
+    plt.plot(x, y)
+    x, y = zip(*xy.dot(clusters[5].cov))
+    plt.plot(x, y)
+    x, y = zip(*xy.dot(clusters[6].cov))
+    plt.plot(x, y)
+    x, y = zip(*xy.dot(clusters[7].cov))
+    plt.plot(x, y)
+    x, y = zip(*xy.dot(clusters[8].cov))
+    plt.plot(x, y)
+
+
+    plt.show()
+
 def k_means():
-    # filename = 'H:/Studium/zweiteSemester/Mustererkennung/Assignment/mustererkennungU1/datasource/spambase.data'
-    #filename = '~/PycharmProjects/mustererkennungU1/datasource/spambase.data'
     filename = './datasource/2d-em.csv'
     lists = loadData(filename)
     arr = array(lists)
-    clustering(arr)
+    guetes = []
+    for i in range(2, 10):
+        clusters = clustering(arr, i)
+        guetes.append(guete(clusters))
+    # clusters = clustering(arr, 2)
+    # guetes.append(guete(clusters))
+    poltguete(guetes, clusters)
 
-    #plt.plot(a)
-    #plt.show()
+
 
 
 k_means()
