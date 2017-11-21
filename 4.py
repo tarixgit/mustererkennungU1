@@ -6,8 +6,6 @@ from matplotlib import colors
 
 class Cluster:
 
-    #cov = 'canine'         # class variable shared by all instances
-
     #covariance = cov
     def __init__(self, arr, cov, mean):
         self.arr = arr
@@ -58,16 +56,18 @@ def distance(vektor, center, cov):
         mult = dif
     else:
         mult = matmul(dif, cov ** (-1))
-    distance = matmul(mult, (vektor - center))
+    distance = matmul(mult, dif)
     return distance
 
 def checkifthesame(clusters, first_cycle):
     same = True
-    #what if some cluster doesn't have points(arr is empty)?
     old_guete = guete(clusters)
 
     #poltguete([old_guete], clusters)
     for cluster in clusters:
+        # what if some cluster doesn't have points(arr is empty)?
+        if len(cluster.arr) < 2:
+            return True
         cluster.old_mean = cluster.mean
         cluster.old_cov = cluster.cov
         cluster.mean = mean(cluster.arr, axis=0) #check if this work, maybe wrong achse
@@ -81,7 +81,6 @@ def checkifthesame(clusters, first_cycle):
 
 def splittedInCluster(arr, clusters):
     numberofcluster = len(clusters)
-    # if means_before != means:
     notsame = True
     first_cycle = True
     while notsame:
@@ -95,11 +94,9 @@ def splittedInCluster(arr, clusters):
                 clusters[cluster_assign_index].arr = array(vector, ndmin=2)
             else:
                 clusters[cluster_assign_index].arr = vstack((clusters[cluster_assign_index].arr, vector))
-        same = checkifthesame(clusters, first_cycle)
         first_cycle = False
-        notsame = not same
+        notsame = not checkifthesame(clusters, first_cycle)
     return_backup_clusterarr(clusters)
-#to test
     return clusters
 
 def initalizeClusters(numberofcluster, arr):
@@ -141,7 +138,7 @@ def poltguete(guetes, clusters):
     plt.plot(x, y)
     plt.subplot(2, 2, 2)
     for i in range(len(clusters)):
-        #Farbe zu enerieren
+        #Farbe zu generieren
         color_ = colors.cnames.items()[i + 3]
         a, b = zip(*clusters[i].arr)
         plt.scatter(a, b, color=color_, edgecolors="black")
@@ -165,21 +162,15 @@ def k_means():
     lists = loadData(filename)
     arr = array(lists)
     guetes = []
-    # to do, number of cluster
-    for i in range(2, 3):
+    for i in range(2, 8):
         clusters = clustering(arr, i)
         guetes.append(guete(clusters))
-    # clusters = clustering(arr, 2)
-    # guetes.append(guete(clusters))
     poltguete(guetes, clusters)
 
 
 
 
 k_means()
-
-# import sklearn
-# train_test_split
 
 
 
