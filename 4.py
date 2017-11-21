@@ -131,12 +131,13 @@ def poltguete(guetes, clusters):
         num_points = len(clusters[i].arr)
         radius = 1
         arcs = linspace(0, 2 * pi, num_points)
-        x = radius * sin(arcs)
+        x = radius * sin(arcs) ##  + clusters[i].mean[0]  funktioniert bei mir nicht
         y = radius * cos(arcs)
         xy = array(list(zip(x, y)))
         x, y = zip(*xy.dot(clusters[i].cov))
-        color_ = colors.cnames.items()[i + 2]
         plt.plot(x, y)
+        plt.plot(clusters[i].mean[0], clusters[i].mean[1], 'r+')
+
     plt.show()
 
 def k_means():
