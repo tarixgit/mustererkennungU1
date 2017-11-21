@@ -49,19 +49,25 @@ def distance(vektor, center, cov):
     distance = matmul(mult, (vektor - center))
     return distance
 
-def checkifthesame(clusters):
+def checkifthesame(clusters, first_cycle):
     same = True
     #what if some cluster doesn't have points(arr is empty)?
+    old_guete = guete(clusters)
     for cluster in clusters:
-        old_mean = cluster.mean
         cluster.mean = mean(cluster.arr, axis=0) #check if this work, maybe wrong achse
         cluster.cov = cov(transpose(cluster.arr))  ## must I to transpose????
+    new_guete = guete(clusters)
+    if first_cycle:
+        return False
+    else:
+        same = new_guete > old_guete
     return same
 
 def splittedInCluster(arr, clusters):
     numberofcluster = len(clusters)
     # if means_before != means:
     notsame = True
+    first_cycle = True
     while notsame:
         for vector in arr:
             distances = []
@@ -72,17 +78,12 @@ def splittedInCluster(arr, clusters):
                 clusters[cluster_assign_index].arr = array(vector, ndmin=2)
             else:
                 clusters[cluster_assign_index].arr = vstack((clusters[cluster_assign_index].arr, vector))
-        same = checkifthesame(clusters)
+        same = checkifthesame(clusters, first_cycle)
+        first_cycle = False
         notsame = not same
+
 #to test
     return clusters
-
-#not used more
-def getFirstCovariances(numberofcluster):
-    x = array([])
-    for i in range(numberofcluster):
-        x.append(identity())
-    return x
 
 def initalizeClusters(numberofcluster, arr):
     numberOfVector = len(arr) # for random
@@ -145,6 +146,7 @@ def k_means():
     lists = loadData(filename)
     arr = array(lists)
     guetes = []
+    # to do, number of cluster
     for i in range(2, 3):
         clusters = clustering(arr, i)
         guetes.append(guete(clusters))
