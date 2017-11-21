@@ -135,6 +135,8 @@ def poltguete(guetes, clusters):
         y = radius * cos(arcs)
         xy = array(list(zip(x, y)))
         x, y = zip(*xy.dot(clusters[i].cov))
+        x += clusters[i].mean[0]
+        y += clusters[i].mean[1]
         plt.plot(x, y)
         plt.plot(clusters[i].mean[0], clusters[i].mean[1], 'r+')
 
@@ -145,7 +147,7 @@ def k_means():
     lists = loadData(filename)
     arr = array(lists)
     guetes = []
-    for i in range(2, 3):
+    for i in range(2, 10):
         clusters = clustering(arr, i)
         guetes.append(guete(clusters))
     # clusters = clustering(arr, 2)
