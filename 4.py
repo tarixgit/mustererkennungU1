@@ -27,6 +27,7 @@ def loadData(filename):
 def backup_clusterarr(clusters):
     for i in range(len(clusters)):
         clusters[i].old_arr = clusters[i].arr
+        clusters[i].arr = []
 
 def return_backup_clusterarr(clusters):
     for i in range(len(clusters)):
