@@ -1,6 +1,7 @@
 from math import *
 from numpy import *
 import matplotlib.pyplot as plt
+from matplotlib import colors
 
 
 class Cluster:
@@ -108,63 +109,34 @@ def clustering(arr, numberofcluster):
 def guete(clusters):
     guete = 0
     for i in range(len(clusters)):
-        guete += linalg.norm(clusters[i].cov, inf)
+        guete += linalg.det(clusters[i].cov)
     return guete
 
-def poltguete(guete, clusters):
+def poltguete(guetes, clusters):
     x = []
     y = []
-    for i in range(len(guete)):
+    for i in range(len(guetes)):
         x.append(i+2)
-        y.append(guete[i])
+        y.append(guetes[i])
     plt.figure(figsize=(15, 10))
     plt.subplot(2, 2, 1)
     plt.plot(x, y)
     plt.subplot(2, 2, 2)
-    a, b = zip(*clusters[0].arr)
-    plt.scatter(a, b, color="blue", edgecolors="black")
-    a, b = zip(*clusters[1].arr)
-    plt.scatter(a, b, color="green", edgecolors="black")
-    a, b = zip(*clusters[2].arr)
-    plt.scatter(a, b, color="black", edgecolors="black")
-    a, b = zip(*clusters[3].arr)
-    plt.scatter(a, b, color="pink", edgecolors="black")
-    a, b = zip(*clusters[4].arr)
-    plt.scatter(a, b, color="red", edgecolors="black")
-    a, b = zip(*clusters[5].arr)
-    plt.scatter(a, b, color="yellow", edgecolors="black")
-    a, b = zip(*clusters[6].arr)
-    plt.scatter(a, b, color="orange", edgecolors="black")
-    a, b = zip(*clusters[7].arr)
-    plt.scatter(a, b, color="gray", edgecolors="black")
-    a, b = zip(*clusters[8].arr)
-    plt.scatter(a, b, color="brown", edgecolors="black")
+    for i in range(len(clusters)):
+        #Farbe zu enerieren
+        color_ = colors.cnames.items()[i + 3]
+        a, b = zip(*clusters[i].arr)
+        plt.scatter(a, b, color=color_, edgecolors="black")
 
-    plt.subplot(2, 2, 3)
-    num_points = 1000
-    radius = 1
-    arcs = linspace(0, 2 * pi, num_points)
-    x = radius * sin(arcs)
-    y = radius * cos(arcs)
-    xy = array(list(zip(x, y)))
-    x, y = zip(*xy.dot(clusters[0].cov))
-    plt.plot(x, y)
-    x, y = zip(*xy.dot(clusters[2].cov))
-    plt.plot(x, y)
-    x, y = zip(*xy.dot(clusters[3].cov))
-    plt.plot(x, y)
-    x, y = zip(*xy.dot(clusters[4].cov))
-    plt.plot(x, y)
-    x, y = zip(*xy.dot(clusters[5].cov))
-    plt.plot(x, y)
-    x, y = zip(*xy.dot(clusters[6].cov))
-    plt.plot(x, y)
-    x, y = zip(*xy.dot(clusters[7].cov))
-    plt.plot(x, y)
-    x, y = zip(*xy.dot(clusters[8].cov))
-    plt.plot(x, y)
-
-
+        num_points = len(clusters[i].arr)
+        radius = 1
+        arcs = linspace(0, 2 * pi, num_points)
+        x = radius * sin(arcs)
+        y = radius * cos(arcs)
+        xy = array(list(zip(x, y)))
+        x, y = zip(*xy.dot(clusters[i].cov))
+        color_ = colors.cnames.items()[i + 2]
+        plt.plot(x, y)
     plt.show()
 
 def k_means():
@@ -172,7 +144,7 @@ def k_means():
     lists = loadData(filename)
     arr = array(lists)
     guetes = []
-    for i in range(2, 10):
+    for i in range(2, 3):
         clusters = clustering(arr, i)
         guetes.append(guete(clusters))
     # clusters = clustering(arr, 2)
