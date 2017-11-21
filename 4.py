@@ -129,7 +129,7 @@ def poltguete(guetes, clusters):
         plt.scatter(a, b, color=color_, edgecolors="black")
 
         num_points = len(clusters[i].arr)
-        radius = 1
+        radius = 2
         arcs = linspace(0, 2 * pi, num_points)
         x = radius * sin(arcs) ##  + clusters[i].mean[0]  funktioniert bei mir nicht
         y = radius * cos(arcs)
