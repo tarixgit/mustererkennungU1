@@ -94,8 +94,8 @@ def splittedInCluster(arr, clusters):
                 clusters[cluster_assign_index].arr = array(vector, ndmin=2)
             else:
                 clusters[cluster_assign_index].arr = vstack((clusters[cluster_assign_index].arr, vector))
-        first_cycle = False
         notsame = not checkifthesame(clusters, first_cycle)
+        first_cycle = False
     return_backup_clusterarr(clusters)
     return clusters
 
@@ -162,7 +162,7 @@ def k_means():
     lists = loadData(filename)
     arr = array(lists)
     guetes = []
-    for i in range(2, 8):
+    for i in range(2, 5):
         clusters = clustering(arr, i)
         guetes.append(guete(clusters))
     poltguete(guetes, clusters)
