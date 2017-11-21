@@ -24,6 +24,17 @@ def loadData(filename):
     file.close()
     return digitarrs
 
+def backup_clusterarr(clusters):
+    for i in range(len(clusters)):
+        clusters[i].old_arr = clusters[i].arr
+
+def return_backup_clusterarr(clusters):
+    for i in range(len(clusters)):
+        clusters[i].arr = clusters[i].old_arr
+        clusters[i].cov = clusters[i].old_cov
+        clusters[i].mean = clusters[i].old_mean
+
+
 #not used
 def getProb(mean, stdDev, arr):
     exponent = exp(-((arr - mean) ** 2) / (2 * (stdDev ** 2)))
@@ -53,7 +64,11 @@ def checkifthesame(clusters, first_cycle):
     same = True
     #what if some cluster doesn't have points(arr is empty)?
     old_guete = guete(clusters)
+
+    #poltguete([old_guete], clusters)
     for cluster in clusters:
+        cluster.old_mean = cluster.mean
+        cluster.old_cov = cluster.cov
         cluster.mean = mean(cluster.arr, axis=0) #check if this work, maybe wrong achse
         cluster.cov = cov(transpose(cluster.arr))  ## must I to transpose????
     new_guete = guete(clusters)
@@ -69,6 +84,7 @@ def splittedInCluster(arr, clusters):
     notsame = True
     first_cycle = True
     while notsame:
+        backup_clusterarr(clusters)
         for vector in arr:
             distances = []
             for i in range(numberofcluster):
@@ -81,6 +97,7 @@ def splittedInCluster(arr, clusters):
         same = checkifthesame(clusters, first_cycle)
         first_cycle = False
         notsame = not same
+    return_backup_clusterarr(clusters)
 #to test
     return clusters
 
