@@ -29,31 +29,39 @@ def loadData(filename):
     file.close()
     return setosa_arr, versicolor_arr, virginica_arr
 
-def initw(ptrain, ntrain):
-    arr = array([])
-    arr.append(ptrain)
-    arr.append(ntrain)
-    x = random.randint(0, len(arr)-1)
-    w = arr[x]
-    return w
+def initw(train_data):
+    x = random.randint(0, len(train_data)-1)
+    w = train_data[x]
+    return w[:len(w)-1]
 
-def getw(ptrain, ntrain):
-    wbefore = initw(ptrain, ntrain)
-    wafter = [0, 0, 0, 0]
-    while(equal(wbefore, wafter)):
-        if equal(wbefore, initw) == False:
-            wbefore = w
-        for p in ptrain:
-            if dot(w, p) < 0:
-                w = sum(w, p, axis=1)
-        for n in ntrain:
-            if dot(w, n > 0):
-                w = sum(w, n, axis=1)
-        wafter = w
+def isPositive(vector, p_mark, n_mark):
+    vectorlen = len(vector)
+    if vector[vectorlen - 1] == p_mark:
+        return True
+    if vector[vectorlen - 1] == n_mark:
+        return False
+
+def isMultNegative(vector, w):
+    return dot(vector, w) < 0
+
+def getw(train_data, p_mark, n_mark):
+    wbefore = initw(train_data) # w-zero
+    wafter = array([0, 0, 0, 0])
+    t = 0
+    while(not array_equal(wbefore, wafter)):
+        wbefore = wafter
+        for vector in train_data:
+            vector_short = vector[:len(vector)-1]
+            if isPositive(vector, p_mark, n_mark) and isMultNegative(vector_short, wbefore):
+                wafter = wbefore + vector_short
+                break
+            if not (isPositive(vector, p_mark, n_mark)) and not (isMultNegative(vector_short, wbefore)):
+                wafter = wbefore - vector_short
+                break
     return wafter
 
-def perception(ptrain, ntrain, ptest, ntest):
-    w = getw(ptrain, ntrain)
+def perception(train_data, ptest, ntest, p_mark, n_mark):
+    w = getw(train_data, p_mark, n_mark)
     error1 = 0
     error2 = 0
     all1 = 0
@@ -64,7 +72,7 @@ def perception(ptrain, ntrain, ptest, ntest):
             error1 += 1
     for n in ntest:
         all2 += 1
-        if dot(w, n) >= 0:
+        if dot(w, n) > 0:
             error2 += 1
     print("rate1: " + error1/all1 + ", rate2: " + error2/all2)
     return 0
@@ -107,8 +115,9 @@ def k_means():
     train_set_ver, test_set_ver = splitArr(arr_set_ver)
     train_set_vir, test_set_vir = splitArr(arr_set_vir)
     #maybe for future
-    #test_set_verP, test_set_verN = getClasses(test_set_ver, 1.0, 2.0)
-    train_set_verP, train_set_verN = getClasses(train_set_ver, 1.0, 2.0)
+    test_set_verP, test_set_verN = getClasses(test_set_ver, 1.0, 2.0)
+    #train_set_verP, train_set_verN = getClasses(train_set_ver, 1.0, 2.0)
+    w = perception(train_set_ver, test_set_verP, test_set_verN, 1.0, 2.0)
     filename = './datasource/iris.data'
 
 
