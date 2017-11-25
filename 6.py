@@ -14,6 +14,46 @@ def loadData(filename):
     file.close()
     return digitarrs
 
+def initw(ptrain, ntrain):
+    arr = array([])
+    arr.append(ptrain)
+    arr.append(ntrain)
+    x = random.randint(0, len(arr)-1)
+    w = arr[x]
+    return w
+
+def getw(ptrain, ntrain):
+    parr = ptrain[:4]
+    narr = ntrain[:4]
+    wbefore = initw(ptrain, ntrain)
+    wafter = [0, 0, 0, 0]
+    while(equal(wbefore, wafter)):
+        for p in ptrain:
+            if dot(w, p) < 0:
+                w = sum(w, p, axis=1)
+        for n in ntrain:
+            if dot(w, n > 0):
+                w = sum(w, n , axis=1)
+        wafter = w
+    return wafter
+
+def perception(ptrain, ntrain, ptest, ntest):
+    w = getw(ptrain, ntrain)
+    error1 = 0
+    error2 = 0
+    all1 = 0
+    all2 = 0
+    for p in ptest:
+        all1 += 1
+        if dot(w, p) <= 0:
+            error1 += 1
+    for n in ntest:
+        all2 += 1
+        if dot(w, n) >= 0:
+            error2 += 1
+    print("rate1: " + error1/all1 + ", rate2: " + error2/all2)
+    return 0
+
 def initalizeClusters(numberofcluster, arr):
     numberOfVector = len(arr) # for random
     clusters = []
@@ -24,6 +64,7 @@ def initalizeClusters(numberofcluster, arr):
         cluster = Cluster([], cov, mean)
         clusters.append(cluster)
     return clusters
+
 
 def k_means():
     filename = './datasource/iris.data'
