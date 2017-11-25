@@ -45,10 +45,10 @@ def getw(ptrain, ntrain):
             wbefore = w
         for p in ptrain:
             if dot(w, p) < 0:
-                w = sum(w, p, axis=1)
+                w = w + p
         for n in ntrain:
             if dot(w, n > 0):
-                w = sum(w, n, axis=1)
+                w = w - n
         wafter = w
     return wafter
 
