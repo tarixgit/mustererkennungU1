@@ -33,22 +33,6 @@ def return_backup_clusterarr(clusters):
         clusters[i].cov = clusters[i].old_cov
         clusters[i].mean = clusters[i].old_mean
 
-
-#not used
-def getProb(mean, stdDev, arr):
-    exponent = exp(-((arr - mean) ** 2) / (2 * (stdDev ** 2)))
-    prob = (1 / (sqrt(2 * pi) * stdDev)) * exponent
-    return prob
-
-#not used more
-def getFirstMeans(numberofcluster, arr):
-    numberOfVector = len(arr)
-    means = array([])
-    for i in range(numberofcluster):
-        x = random.randint(1, numberOfVector)
-        means.append(arr[x])
-    return means
-
 def distance(vektor, center, cov):
     dif = vektor - center
     #dif.shape = (len(dif), 1)
@@ -62,7 +46,6 @@ def distance(vektor, center, cov):
 def checkifthesame(clusters, first_cycle):
     same = True
     old_guete = guete(clusters)
-
     #poltguete([old_guete], clusters)
     for cluster in clusters:
         # what if some cluster doesn't have points(arr is empty)?
@@ -71,7 +54,7 @@ def checkifthesame(clusters, first_cycle):
         cluster.old_mean = cluster.mean
         cluster.old_cov = cluster.cov
         cluster.mean = mean(cluster.arr, axis=0) #check if this work, maybe wrong achse
-        cluster.cov = cov(transpose(cluster.arr))  ## must I to transpose????
+        cluster.cov = cov(transpose(cluster.arr))  ## must I to transpose
     new_guete = guete(clusters)
     if first_cycle:
         return False
@@ -100,7 +83,7 @@ def splittedInCluster(arr, clusters):
     return clusters
 
 def initalizeClusters(numberofcluster, arr):
-    numberOfVector = len(arr) # for random
+    numberOfVector = len(arr)
     clusters = []
     for i in range(numberofcluster):
         r = random.randint(1, numberOfVector)
@@ -111,13 +94,11 @@ def initalizeClusters(numberofcluster, arr):
     return clusters
 
 def clustering(arr, numberofcluster):
-    #maybe to change the loop to elbogen method, where you dont stop until you broder (x/y == 1) overcomme
-    #for numberofcluster  in range(2, 10):
         # fuer jeder cluster
         # 1) cluster finded
         # 2) covarianz bekommen und Guete berechnen
     clusters = initalizeClusters(numberofcluster, arr)
-    clustersnew = splittedInCluster(arr, clusters) #renew
+    clustersnew = splittedInCluster(arr, clusters)
     return clustersnew
 
 
@@ -146,7 +127,7 @@ def poltguete(guetes, clusters):
         num_points = len(clusters[i].arr)
         radius = 2
         arcs = linspace(0, 2 * pi, num_points)
-        x = radius * sin(arcs) ##  + clusters[i].mean[0]  funktioniert bei mir nicht
+        x = radius * sin(arcs)
         y = radius * cos(arcs)
         xy = array(list(zip(x, y)))
         x, y = zip(*xy.dot(clusters[i].cov))
