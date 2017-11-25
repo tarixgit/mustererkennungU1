@@ -49,14 +49,17 @@ def getw(train_data, p_mark, n_mark):
     wafter = array([0, 0, 0, 0])
     t = 0
     while(not array_equal(wbefore, wafter)):
-        wbefore = wafter
+        if not t == 0 :
+            wbefore = wafter
         for vector in train_data:
             vector_short = vector[:len(vector)-1]
             if isPositive(vector, p_mark, n_mark) and isMultNegative(vector_short, wbefore):
                 wafter = wbefore + vector_short
+                t += 1
                 break
             if not (isPositive(vector, p_mark, n_mark)) and not (isMultNegative(vector_short, wbefore)):
                 wafter = wbefore - vector_short
+                t += 1
                 break
     return wafter
 
@@ -74,7 +77,9 @@ def perception(train_data, ptest, ntest, p_mark, n_mark):
         all2 += 1
         if dot(w, n) > 0:
             error2 += 1
-    print("rate1: " + error1/all1 + ", rate2: " + error2/all2)
+    error1 = float(error1)
+    error2 = float(error2)
+    print("error rate1: " + str(error1/all1) + ", error rate2: " + str(error2/all2))
     return 0
 
 def initalizeClusters(numberofcluster, arr):
