@@ -38,8 +38,6 @@ def initw(ptrain, ntrain):
     return w
 
 def getw(ptrain, ntrain):
-    parr = ptrain[:4]
-    narr = ntrain[:4]
     wbefore = initw(ptrain, ntrain)
     wafter = [0, 0, 0, 0]
     while(equal(wbefore, wafter)):
@@ -48,7 +46,7 @@ def getw(ptrain, ntrain):
                 w = sum(w, p, axis=1)
         for n in ntrain:
             if dot(w, n > 0):
-                w = sum(w, n , axis=1)
+                w = sum(w, n, axis=1)
         wafter = w
     return wafter
 
