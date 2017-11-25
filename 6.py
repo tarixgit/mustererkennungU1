@@ -41,6 +41,8 @@ def getw(ptrain, ntrain):
     wbefore = initw(ptrain, ntrain)
     wafter = [0, 0, 0, 0]
     while(equal(wbefore, wafter)):
+        if equal(wbefore, initw) == False:
+            wbefore = w
         for p in ptrain:
             if dot(w, p) < 0:
                 w = sum(w, p, axis=1)
