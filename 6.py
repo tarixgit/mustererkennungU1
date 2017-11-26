@@ -56,19 +56,19 @@ def getw(train_data, p_mark, n_mark):
             if isPositive(vector, p_mark, n_mark) and isMultNegative(vector_short, wbefore):
                 wafter = wbefore + vector_short
                 t += 1
-                break
+                pass
             if not (isPositive(vector, p_mark, n_mark)) and not (isMultNegative(vector_short, wbefore)):
                 wafter = wbefore - vector_short
                 t += 1
-                break
+                pass
     return wafter
 
 def perception(train_data, ptest, ntest, p_mark, n_mark):
     w = getw(train_data, p_mark, n_mark)
-    error1 = 0
-    error2 = 0
-    all1 = 0
-    all2 = 0
+    error1 = 0.0
+    error2 = 0.0
+    all1 = 0.0
+    all2 = 0.0
     for p in ptest:
         all1 += 1
         if dot(w, p) <= 0:
@@ -77,21 +77,8 @@ def perception(train_data, ptest, ntest, p_mark, n_mark):
         all2 += 1
         if dot(w, n) > 0:
             error2 += 1
-    error1 = float(error1)
-    error2 = float(error2)
-    print("error rate1: " + str(error1/all1) + ", error rate2: " + str(error2/all2))
+    print("All1: " + str(all1) + " error1: " + str(error1) + ", All2: " + str(all2) + " error2: " + str(error2))
     return 0
-
-def initalizeClusters(numberofcluster, arr):
-    numberOfVector = len(arr) # for random
-    clusters = []
-    for i in range(numberofcluster):
-        r = random.randint(1, numberOfVector)
-        mean = arr[r]
-        cov = identity(2)
-        cluster = Cluster([], cov, mean)
-        clusters.append(cluster)
-    return clusters
 
 def splitArr(arr):
     random.shuffle(arr)
@@ -117,13 +104,14 @@ def k_means():
     setosa_virginica = setosa_list + virginica_list
     arr_set_ver = array(setosa_versicolor)
     arr_set_vir = array(setosa_virginica)
+
     train_set_ver, test_set_ver = splitArr(arr_set_ver)
-    train_set_vir, test_set_vir = splitArr(arr_set_vir)
-    #maybe for future
     test_set_verP, test_set_verN = getClasses(test_set_ver, 1.0, 2.0)
-    #train_set_verP, train_set_verN = getClasses(train_set_ver, 1.0, 2.0)
-    w = perception(train_set_ver, test_set_verP, test_set_verN, 1.0, 2.0)
-    filename = './datasource/iris.data'
+    perception(train_set_ver, test_set_verP, test_set_verN, 1.0, 2.0)
+
+    train_set_vir, test_set_vir = splitArr(arr_set_vir)
+    test_set_virP, test_set_virN = getClasses(test_set_vir, 1.0, 3.0)
+    perception(train_set_vir, test_set_virP, test_set_virN, 1.0, 3.0)
 
 
 
