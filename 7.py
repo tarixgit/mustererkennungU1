@@ -30,10 +30,6 @@ def do_beta_step(beta_before, gamma, dldb):
     beta_after = beta_before + gamma * dldb
     return beta_after
 
-def get_posibillity():
-    return
-
-
 def normalization(arr):
     nor_arr = []
     lenth = len(arr)
@@ -48,8 +44,18 @@ def normalization(arr):
     return nor_arr
 
 
-def sigmoid(beta, x_vector, y):
+def sigmoid_p(beta, x_vector, y): #possibility function
     return 1.0/1 + np.exp(np.dot(beta, x_vector) * (-y))
+
+def find_beta(beta0, gamma, train_data_arr):
+    #
+    beta_current = beta0
+    length = len(train_data_arr)
+    for i in range(length - 1):
+        if sigmoid(beta_current, vector, y) = 0:
+            dldb = 0.....
+    beta_after = do_beta_step(beta_current, gamma, dldb)
+    return True;
 
 def logistic_regression():
     filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
