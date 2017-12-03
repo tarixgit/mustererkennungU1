@@ -149,7 +149,7 @@ def perception():
 # Klassifikatoren: Iris-setosa und Iris-virginica
     train_set_vir, test_set_vir = split_arr(arr_set_vir)
     test_set_virP, test_set_virN = get_classes(test_set_vir, 1.0, 3.0)
-    error_rate(test_set_virP, test_set_virN, getw(train_set_ver, 1.0, 3.0))
+    error_rate(test_set_virP, test_set_virN, getw(train_set_vir, 1.0, 3.0))
 # beste Gewichtsvektor
     itr = 1000
     train_ver_vir, test_ver_vir = split_arr(arr_ver_vir)
