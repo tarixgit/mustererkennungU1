@@ -35,8 +35,7 @@ def normalization(arr):
 
 def sigmoid(beta, arr_x):
     lenth = len(arr_x)
-    p = (1/1+np.exp(np.dot(beta, arr_x[0:lenth - 1]) * (-arr_x[lenth])))
-    return p
+    return 1.0/1+np.exp(np.dot(beta, arr_x[0:lenth - 1]) * (-arr_x[lenth]))
 
 
 def logistic_regression():
