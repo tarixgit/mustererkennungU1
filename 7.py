@@ -35,7 +35,7 @@ def normalization(arr):
     m, n = np.shape(arr)
     label_arr = arr[:, n - 1]
     for i in range(n - 1):
-        xi = arr[:, i-1]
+        xi = arr[:, i-1] #-1?
         mean = np.mean(xi)
         var = np.var(xi)
         nor_arr.append((xi - mean)/var)
@@ -59,12 +59,32 @@ def find_beta(beta0, gamma, train_data_arr, iteration_number):
     beta_after = do_beta_step(beta_current, gamma, dldb)
     return True;
 
+def classificator(beta, test_data):
+    all1 = 0.0
+    error1 = 0.0
+    all2 = 0.0
+    error2 = 0.0
+    length = len(test_data)
+    for i in range(length):
+        y = np.dot(beta, test_data[:length- 1])
+        if test_data[length- 1]==1:
+            all1 += 1
+            if y<0:
+                error1 += 1
+        else:
+            all2 += 1
+            if y>=0:
+                error2 += 1
+    print("p, all vectors: " + str(all1) + " error 1: " + str(error1) + ", n, all vectors: " + str(all2) + " error2: " + str(error2))
+
+
 def logistic_regression():
     filename = './datasource/spambase.data'
     arr = load_data(filename)
-    train_data, test_data = split_arr(arr)
-    train_data_arr = np.array(train_data)
-    beta0 = intiliaze_beta(train_data)
-    train_data_norm = normalization(train_data_arr)
+    arr = np.array(arr)
+    data_arr = normalization(arr)
+    train_data, test_data = split_arr(data_arr)
+
+
 
 logistic_regression()
