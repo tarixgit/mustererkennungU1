@@ -35,7 +35,12 @@ def get_posibillity():
 
 
 def normalization(arr):
-    mean = np.mean(arr[])
+    nor_arr = []
+    for i in range(len(arr)):
+        mean = np.mean(arr[:i])
+        var = np.var(arr[:i])
+        nor_arr.append((arr[:i]- mean)/var)
+    return np.transpose(nor_arr)
 
 
 def logistic_regression:
