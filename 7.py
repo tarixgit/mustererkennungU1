@@ -50,14 +50,24 @@ def normalization(arr):
 def sigmoid_p(beta, x_vector, y): #possibility function
     return 1.0/1 + np.exp(np.dot(beta, x_vector) * (-y))
 
-def find_beta(beta0, gamma, train_data_arr, iteration_number):
+def find_beta(beta0, gamma, train_data, iteration_number):
     #
     beta_current = beta0
-    length = len(train_data_arr)
-    for i in range(length - 1):
-
-    beta_after = do_beta_step(beta_current, gamma, dldb)
-    return True;
+    train_data_len = len(train_data)
+    vector_len = len(train_data[0])
+    for i in range(iteration_number):
+        #get dldb
+        dldb = np.zeros(vector_len)
+        for j in range(train_data_len):
+            xi = train_data[j][:vector_len - 1]
+            y = train_data[j][vector_len]
+            correct_vec = y * xi * (1 - sigmoid_p(beta_current, xi, y))
+            dldb = dldb + correct_vec
+        dldb_step = dldb * gamma
+        beta_current = do_beta_step(beta_current, gamma, dldb_step)
+        #if beta_after - beta-current < threshold:
+        #    break
+    return beta_current
 
 def logistic_regression():
     filename = './datasource/spambase.data'
