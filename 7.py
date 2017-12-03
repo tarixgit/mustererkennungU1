@@ -32,15 +32,18 @@ def do_beta_step(beta_before, gamma, dldb):
 
 def normalization(arr):
     nor_arr = []
-    lenth = len(arr)
-    label_arr = arr[lenth:]
-    for i in range(lenth - 1):
-        mean = np.mean(arr[:i])
-        var = np.var(arr[:i])
-        nor_arr.append((arr[:i] - mean)/var)
+    m, n = np.shape(arr)
+    label_arr = arr[:, n - 1]
+    for i in range(n - 1):
+        xi = arr[:, i-1]
+        mean = np.mean(xi)
+        var = np.var(xi)
+        nor_arr.append((xi - mean)/var)
+    for i in range(m - 1):
+        if label_arr[i] == 0:
+            label_arr[i] = -1
+    nor_arr.append(label_arr)
     nor_arr = np.transpose(nor_arr)
-    for i in range(lenth):
-        nor_arr[i:].append(label_arr[i])
     return nor_arr
 
 
@@ -58,7 +61,7 @@ def find_beta(beta0, gamma, train_data_arr):
     return True;
 
 def logistic_regression():
-    filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
+    filename = './datasource/spambase.data'
     arr = load_data(filename)
     train_data, test_data = split_arr(arr)
     train_data_arr = np.array(train_data)
