@@ -16,8 +16,8 @@ def load_data(filename):
 def split_arr(arr):
     #TODO: check if this work for list
     np.random.shuffle(arr)
-    train_data = np.arr[:int((len(arr) + 1) * .80)]  # Remaining 80% to training set
-    test_data = np.arr[int(len(arr) * .80 + 1):]  # Splits 20% data to test set
+    train_data = arr[:int((len(arr) + 1) * .80)]  # Remaining 80% to training set
+    test_data = arr[int(len(arr) * .80 + 1):]  # Splits 20% data to test set
     return train_data, test_data
 
 def intiliaze_beta(train_data):
@@ -48,16 +48,15 @@ def normalization(arr):
     return nor_arr
 
 
-def sigmoid(beta, arr_x):
-    lenth = len(arr_x)
-    return 1.0/1+np.exp(np.dot(beta, arr_x[0:lenth - 1]) * (-arr_x[lenth]))
-
+def sigmoid(beta, x_vector, y):
+    return 1.0/1 + np.exp(np.dot(beta, x_vector) * (-y))
 
 def logistic_regression():
     filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
     arr = load_data(filename)
     train_data, test_data = split_arr(arr)
+    train_data_arr = np.array(train_data)
     beta0 = intiliaze_beta(train_data)
-
+    train_data_norm = normalization(train_data_arr)
 
 logistic_regression()
