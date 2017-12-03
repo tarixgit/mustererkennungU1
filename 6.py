@@ -129,7 +129,7 @@ def error_rate(ptest, ntest, w):
         all2 += 1
         if np.dot(w, n) >= 0:
             error2 += 1
-    print("All1: " + str(all1) + " error1: " + str(error1) + ", All2: " + str(all2) + " error2: " + str(error2))
+    print("Cluster 1, all vectors: " + str(all1) + " error 1: " + str(error1) + ", Cluster 2, all vectors: " + str(all2) + " error2: " + str(error2))
     return 0
 
 
@@ -142,21 +142,22 @@ def perception():
     arr_set_ver = np.array(setosa_versicolor)
     arr_set_vir = np.array(setosa_virginica)
     arr_ver_vir = np.array(versicolor_virgiica)
-# Klassifikatoren: Iris-setosa und Iris-versicolor
+# Klassifikator: Iris-setosa und Iris-versicolor
     train_set_ver, test_set_ver = split_arr(arr_set_ver)
     test_set_verP, test_set_verN = get_classes(test_set_ver, 1.0, 2.0)
+    print("Klassifikator: Iris-setosa und Iris-versicolor")
     error_rate(test_set_verP, test_set_verN, getw(train_set_ver, 1.0, 2.0))
-# Klassifikatoren: Iris-setosa und Iris-virginica
+# Klassifikator: Iris-setosa und Iris-virginica
     train_set_vir, test_set_vir = split_arr(arr_set_vir)
     test_set_virP, test_set_virN = get_classes(test_set_vir, 1.0, 3.0)
+    print("Klassifikator: Iris-setosa und Iris-virginica")
     error_rate(test_set_virP, test_set_virN, getw(train_set_vir, 1.0, 3.0))
 # beste Gewichtsvektor
     itr = 1000
     train_ver_vir, test_ver_vir = split_arr(arr_ver_vir)
     test_ver_virP, test_ver_virN = get_classes(test_ver_vir, 2, 3)
+    print("Klassifikator mit bestem Gewichtsvektor: Iris-versicolor und Iris-virginica")
     error_rate(test_ver_virP, test_ver_virN, bestw(train_ver_vir, itr, 2, 3))
-
-
 
 
 perception()
