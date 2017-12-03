@@ -21,13 +21,24 @@ def split_arr(arr):
 
 def normalization(arr):
     nor_arr = []
-    for i in range(len(arr)):
+    lenth = len(arr)
+    label_arr = arr[lenth:]
+    for i in range(lenth - 1):
         mean = np.mean(arr[:i])
         var = np.var(arr[:i])
-        nor_arr.append((arr[:i]- mean)/var)
-    return np.transpose(nor_arr)
+        nor_arr.append((arr[:i] - mean)/var)
+    nor_arr = np.transpose(nor_arr)
+    for i in range(lenth):
+        nor_arr[i:].append(label_arr[i])
+    return nor_arr
 
 
-def logistic_regression:
+def sigmoid(beta, arr_x):
+    lenth = len(arr_x)
+    p = (1/1+np.exp(np.dot(beta, arr_x[0:lenth - 1]) * (-arr_x[lenth])))
+    return p
+
+
+def logistic_regression():
     filename = '/home/tarix/PycharmProjects/mustererkennungU1/datasource/spambase.data'
     arr = load_data(filename)
