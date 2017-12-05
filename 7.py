@@ -124,17 +124,17 @@ def logistic_regression():
 
 
 def xor_pro():
-    train_data = np.array(([1, -1, -1, 0], [1, -1, 1, 0], [1, 1, -1, 0], [1, 1, 1, 1]))
+    train_data = np.array(([-1, -1, -1], [-1, 1, -1], [1, -1, -1], [1, 1, 1]))
     beta0 = intiliaze_beta(train_data)
-    gamma = 0.001
+    gamma = 0.01
     iteration_number = 100
     beta = find_beta(train_data, beta0, gamma, iteration_number)
     classificator(beta, train_data)
-    train_data = np.array(([1, -1, -1, 0], [1, -1, 1, 1], [1, 1, -1, 1], [1, 1, 1, 1]))
+    train_data = np.array(([-1, -1, -1], [-1, 1, 1], [1, -1, 1], [1, 1, 1]))
     beta0 = intiliaze_beta(train_data)
     beta = find_beta(train_data, beta0, gamma, iteration_number)
     classificator(beta, train_data)
-    train_data = np.array(([1, -1, -1, 0], [1, -1, 1, 1], [1, 1, -1, 1], [1, 1, 1, 0]))
+    train_data = np.array(([-1, -1, -1], [-1, 1, 1], [1, -1, 1], [1, 1, -1]))
     beta0 = intiliaze_beta(train_data)
     beta = find_beta(train_data, beta0, gamma, iteration_number)
     classificator(beta, train_data)
