@@ -109,7 +109,11 @@ def logistic_regression():
     arr = load_data(filename)
     arr = np.array(arr)
     data_arr = normalization(arr)
-    train_data, test_data = split_arr(data_arr)
+    # add 1
+    data_length, vector_len = np.shape(data_arr)
+    data_full = np.ones((data_length, vector_len + 1))
+    data_full[:, 1:] = data_arr
+    train_data, test_data = split_arr(data_full)
     beta0 = intiliaze_beta(train_data)
     gamma = 5 * 10 ** (-3)
     iteration_number = 1000
@@ -120,21 +124,21 @@ def logistic_regression():
 
 
 def xor_pro():
-    train_data = np.array(([-1, -1, 0], [-1, 1, 0], [1, -1, 0], [1, 1, 1]))
+    train_data = np.array(([1, -1, -1, 0], [1, -1, 1, 0], [1, 1, -1, 0], [1, 1, 1, 1]))
     beta0 = intiliaze_beta(train_data)
     gamma = 0.001
-    iteration_number = 1000
+    iteration_number = 100
     beta = find_beta(train_data, beta0, gamma, iteration_number)
     classificator(beta, train_data)
-    train_data = np.array(([-1, -1, 0], [-1, 1, 1], [1, -1, 1], [1, 1, 1]))
+    train_data = np.array(([1, -1, -1, 0], [1, -1, 1, 1], [1, 1, -1, 1], [1, 1, 1, 1]))
     beta0 = intiliaze_beta(train_data)
     beta = find_beta(train_data, beta0, gamma, iteration_number)
     classificator(beta, train_data)
-    train_data = np.array(([-1, -1, 0], [-1, 1, 1], [1, -1, 1], [1, 1, 0]))
+    train_data = np.array(([1, -1, -1, 0], [1, -1, 1, 1], [1, 1, -1, 1], [1, 1, 1, 0]))
     beta0 = intiliaze_beta(train_data)
     beta = find_beta(train_data, beta0, gamma, iteration_number)
     classificator(beta, train_data)
 
-# logistic_regression()
+#logistic_regression()
 xor_pro()
 
