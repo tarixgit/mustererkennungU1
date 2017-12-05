@@ -123,14 +123,14 @@ def xor_pro():
     train_data = np.array(([0, 0, 0], [0, 1, 0], [1, 0, 0], [1, 1, 1]))
     beta0 = intiliaze_beta(train_data)
     gamma = 1
-    iteration_number = 10
+    iteration_number = 1
     beta = find_beta(train_data, beta0, gamma, iteration_number)
     classificator(beta, train_data)
     train_data = np.array(([0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 1]))
     beta0 = intiliaze_beta(train_data)
     beta = find_beta(train_data, beta0, gamma, iteration_number)
     classificator(beta, train_data)
-    train_data = np.array(([0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 1]))
+    train_data = np.array(([0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]))
     beta0 = intiliaze_beta(train_data)
     beta = find_beta(train_data, beta0, gamma, iteration_number)
     classificator(beta, train_data)
