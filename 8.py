@@ -18,11 +18,8 @@ def taketrainingdict(trainigfolder):
 def change_dimension(train_data, n):
     cov = np.cov(train_data, rowvar=False)
     eigenvals, eigenvects = np.linalg.eig(np.mat(cov))
-    eigenvals_arr = eigenvals.reshape(len(eigenvals), 1)
-    eigenvects_eigenvals = eigenvects_eigenvals.append(eigenvects, eigenvals_arr, axis=1)
-
-    eigenval_indexes = np.argsort(eigenvects_eigenvals, axis=len(eigenvals_arr[0]))
-    n_eigenval_indexes = eigenval_indexes[0:n-1:1]
+    eigenval_indexes = np.argsort(-eigenvals)
+    n_eigenval_indexes = eigenval_indexes[0:n]
     n_eigenvects = eigenvects[:, n_eigenval_indexes]
     return 0
 
