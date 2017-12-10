@@ -20,7 +20,7 @@ def change_dimension(train_data, n):
     eigenvals, eigenvects = np.linalg.eig(np.mat(cov))
     eigenval_indexes = np.argsort(-eigenvals)
     n_eigenval_indexes = eigenval_indexes[0:n]
-    n_eigenvects = eigenvects[:, n_eigenval_indexes]
+    n_eigenvects = eigenvects[n_eigenval_indexes]
     new_data = train_data * np.transpose(n_eigenvects)
     return new_data
 
