@@ -1,10 +1,10 @@
 import numpy as np
 
 
-def taketrainingdict(trainigfolder):
+def take_training_dict(trainig_folder):
     output = {}
     for digit in range(10):
-        filename = trainigfolder + 'train.' + str(digit)
+        filename = trainig_folder + 'train.' + str(digit)
         file = open(filename, 'r')
         digitarrs = []
         for line in file:
@@ -20,12 +20,21 @@ def change_dimension(train_data, n):
     eigenval_indexes = np.argsort(-eigenvals)
     n_eigenval_indexes = eigenval_indexes[0:n-1:1]
     n_eigenvects = eigenvects[:, n_eigenval_indexes]
-    return 0
+    new_data = train_data * np.transpose(n_eigenvects)
+    return new_data
 
 
 def pca():
-    testfilename = './datasource/test/zip.test'
-    trainigfolder = './datasource/training/'
-    testfile = open(testfilename, 'r')
-    trainingdict = taketrainingdict(trainigfolder)
+    # test_filename = './datasource/test/zip.test'
+    trainig_folder = './datasource/training/'
+    # test_file = open(test_filename, 'r')
+    training_dict = take_training_dict(trainig_folder)
+    vectors = []
+    vector = []
+    for i in range(len(training_dict)):
+        n_eigenvects = change_dimension(training_dict[i])
+        for j in range(len(n_eigenvects)):
+            for k in range(len(n_eigenvects[0])):
+                vector.append(n_eigenvects[j][k])
+            vectors.append(vector)
     return 0
