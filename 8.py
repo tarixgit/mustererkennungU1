@@ -1,5 +1,5 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 def taketrainingdict(trainigfolder):
     #output = {}
@@ -24,6 +24,10 @@ def change_dimension(train_data, n):
     new_data = train_data * np.transpose(n_eigenvects)
     return new_data
 
+def visualize(data):
+    plt.figure(figsize=(12, 8))
+    plt.plot(data[:,0], data[:,1], 'r+',)
+    plt.show()
 
 def pca():
     testfilename = './datasource/test/zip.test'
@@ -31,7 +35,8 @@ def pca():
     testfile = open(testfilename, 'r')
     trainingdict = taketrainingdict(trainigfolder)
     trainingarr = np.array(trainingdict)
-    change_dimension(trainingarr, 10)
+    newarr = change_dimension(trainingarr, 2)
+    visualize(newarr)
     return 0
 
 pca()
