@@ -36,14 +36,23 @@ def change_dimension(n_eigenvects, train_data):
 
 def visualize(data):
     fig = plt.figure(figsize=(40, 20))
-    ax = [fig.add_subplot(3, 4, 1), fig.add_subplot(3, 4, 2), fig.add_subplot(3, 4, 3), fig.add_subplot(3, 4, 4),
-          fig.add_subplot(3, 4, 5),
-          fig.add_subplot(3, 4, 6), fig.add_subplot(3, 4, 7), fig.add_subplot(3, 4, 8), fig.add_subplot(3, 4, 9),
-          fig.add_subplot(3, 4, 10)]
+    # ax = [fig.add_subplot(3, 4, 1), fig.add_subplot(3, 4, 2), fig.add_subplot(3, 4, 3), fig.add_subplot(3, 4, 4),
+    #       fig.add_subplot(3, 4, 5),
+    #       fig.add_subplot(3, 4, 6), fig.add_subplot(3, 4, 7), fig.add_subplot(3, 4, 8), fig.add_subplot(3, 4, 9),
+    #       fig.add_subplot(3, 4, 10)]
+    ax = []
     c_value = ['orange', 'yellow', 'green', 'blue', 'pink', 'black', 'brown', 'purple', 'gray', 'gold']
+    count=1
     for i in range(len(data)):
         a = data[i]
-        ax[i].scatter(a[:, 0], a[:, 1], color=c_value[i], label=i, s=3)
+        for j in range(i+1, len(data)):
+            b = data[j]
+            x = fig.add_subplot(5, 9, count)
+            x.plot(a[:, 0], a[:, 1], 'r+', color=c_value[i], label=i)
+            x.plot(b[:, 0], b[:, 1], 'r+', color=c_value[j], label=j)
+            x.set_title(str(i) + ' and ' + str(j))
+            ax.append(x)
+            count += 1
     plt.show()
 
 
