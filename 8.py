@@ -14,12 +14,14 @@ def taketrainingdict(trainigfolder):
         output[digit] = digitarrs
     return output
 
-
-def get_eigenvectors(data, n):
+def transform_data(data):
     train_data = []
     for i in range(len(data)):
         train_data.extend(data[i])
-    cov = np.cov(train_data, rowvar=False)
+    return train_data
+
+def get_eigenvectors(data, n):
+    cov = np.cov(data, rowvar=False)
     eigenvals, eigenvects = np.linalg.eig(np.mat(cov))
     eigenval_indexes = np.argsort(-eigenvals)
     n_eigenval_indexes = eigenval_indexes[0:n]
@@ -50,8 +52,10 @@ def pca():
     trainigfolder = './datasource/training/'
     testfile = open(testfilename, 'r')
     trainingdict = taketrainingdict(trainigfolder)
+    rawtrainingdict = transform_data(trainingdict)
+    n_eigenvects = get_eigenvectors(rawtrainingdict, 2)
+
     new_data = {}
-    n_eigenvects = get_eigenvectors(trainingdict, 2)
     for i in range(len(trainingdict)):
         newarr = change_dimension(n_eigenvects, trainingdict[i])
         new_data[i] = newarr
