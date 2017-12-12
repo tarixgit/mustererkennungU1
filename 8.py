@@ -77,7 +77,9 @@ def pca():
 
 
 def plotten(newarr):
+    fig = plt.figure(figsize=(40, 20))
     for i in range(len(newarr)):
+        x = fig.add_subplot(5, 5, i+1)
         newarr[i] = vector.reshape((64, 64))
         plt.figimage(newarr[i])
     plt.show()
