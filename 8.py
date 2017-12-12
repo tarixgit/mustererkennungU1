@@ -33,11 +33,16 @@ def change_dimension(n_eigenvects, train_data):
 
 
 def visualize(data):
+    fig = plt.figure(figsize=(40, 20))
+    ax = [fig.add_subplot(3, 4, 1), fig.add_subplot(3, 4, 2), fig.add_subplot(3, 4, 3), fig.add_subplot(3, 4, 4),
+          fig.add_subplot(3, 4, 5),
+          fig.add_subplot(3, 4, 6), fig.add_subplot(3, 4, 7), fig.add_subplot(3, 4, 8), fig.add_subplot(3, 4, 9),
+          fig.add_subplot(3, 4, 10)]
     c_value = ['orange', 'yellow', 'green', 'blue', 'pink', 'black', 'brown', 'purple', 'gray', 'gold']
     for i in range(len(data)):
         a = data[i]
-        plt.scatter(a[:, 0], a[:, 1], marker='x', color=c_value[i])
-        plt.show()
+        ax[i].scatter(a[:, 0], a[:, 1], color=c_value[i], label=i, s=3)
+    plt.show()
 
 
 def pca():
