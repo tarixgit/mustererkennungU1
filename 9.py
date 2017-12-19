@@ -19,7 +19,6 @@ class Data:
 
 class Layer:
     def __init__(self, neuronen, input_anzahl):  # fuer die esrte Schichte sind es attributen
-        # self.gewichte = np.random.rand(neuronen, input_anzahl+1)
         self.gewichte = np.random.rand(neuronen, input_anzahl+1)
         self.neuronen = neuronen
         self.input_anzahl = input_anzahl
@@ -42,7 +41,7 @@ class Layer:
         vs = np.vectorize(s)
         a = np.sum(vs(input, self.gewichte), axis=1)
         for i in range(len(a)):
-            self.func[i] = (1 / (1 + np.e ** (- a[i])))   # output auf jeder Schichte       # schritt 1,2 in der Vorlesung
+            self.func[i] = (1 / (1 + np.e ** (- a[i])))   # schritt 1,2 in der Vorlesung
         self.ableitung = MathTools.list_each_list_multiply(self.func, (MathTools.value_list_add(-1, self.func)))    # schritt 4,5 in der Vorlesung
 
     def calc_e(self, target):      # schritt 3 in der Vorlesung
@@ -105,14 +104,8 @@ class Neuronetz:
                 if i != 0:
                     # schritt 8,9 in der Vorlesung
                     b = self.layers[i - 1].func
-                    # delta_gewichte = MathTools.vaule_list_multiply((-learning_rate),
-                    #                                                MathTools.list_each_list_multiply(
-                    #                                                    self.layers[i].delta, self.layers[i - 1].func))
                 else:
                     b = input
-                    # delta_gewichte = MathTools.vaule_list_multiply((-learning_rate),
-                    #                                                MathTools.list_each_list_multiply(
-                    #                                                    self.layers[i].delta, input))
             else:
                 self.layers[i].delta = MathTools.list_each_list_multiply(self.layers[i].ableitung, self.layers[i].e)
                 b = self.layers[i - 1].func
