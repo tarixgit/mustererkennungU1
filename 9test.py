@@ -170,13 +170,8 @@ class Neuronetz:
                 #     a, self.layers[i+1].delta)
                 self.layers[i].delta = self.layers[i].ableitung * np.dot(self.layers[i+1].gewichte, self.layers[i+1].delta)
                 # O fuer Schritt 8,9 in der Vorlesung
-                if i != 0:
-                    b = self.layers[i - 1].func
-                else:
-                    b = input
             else:
                 self.layers[i].delta = self.layers[i].ableitung * self.layers[i].e
-                b = self.layers[i - 1].func
                 #vorherige O
             # delta_gewichte = MathTools.vaule_list_multiply((-learning_rate),
             #                                                    MathTools.list_each_list_multiply(
@@ -184,8 +179,12 @@ class Neuronetz:
 
         for i in range(last_index, -1, -1):
             # KOREKTUR
-            delta_gewichte = MathTools.calc_delta_gewichte(learning_rate, self.layers[i].delta, b)
-            self.layers[i].gewichte = MathTools.update_gewichte(self.layers[i].gewichte, delta_gewichte)
+            if i != 0:
+                delta_gewichte = (learning_rate * self.layers[i].delta) * self.layers[i - 1].func
+            else:
+                delta_gewichte = (learning_rate * self.layers[i].delta) * input
+
+            self.layers[i].gewichte = self.layers[i].gewichte - delta_gewichte
 
     def training(self, learning_rate, iteration, label, training_data):
         layer_length = len(self.layers)
