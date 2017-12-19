@@ -2,6 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+# achtung
+# achtung
+# achtung
+# achtung
+# vielleicht habe ich alle multiplikation falsche gemacht, die genaurichkeit ist ja so immer 0
+# achtung
+# achtung
+# achtung
+# achtung
 class Data:
     def __init__(self):
         self.traingdata = {}
