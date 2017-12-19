@@ -1,19 +1,27 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+import os
 
 class ReductionDimension:
+
     def taketrainingdict(self, trainigfolder):
-        output = {}
-        for digit in range(10):
-            filename = trainigfolder + 'train.' + str(digit)
-            file = open(filename, 'r')
-            digitarrs = []
-            for line in file:
-                arr = list(map(float, line.split(',')))
-                digitarrs.append(arr)
-            output[digit] = digitarrs
+        output = []
+        for filename in os.listdir(trainigfolder):
+            #filename = trainigfolder + 'train.' + str(digit)
+            imagearr = self.read_image(trainigfolder + filename)
+            output.append(imagearr)
         self.trainingarr = output
+
+    def read_image(self, file):
+        infile = open(file, 'r')
+        name = next(infile)
+        header = next(infile)
+        width = int(header.split()[0])
+        height = int(header.split()[1])
+        maxval = next(infile)
+        infile.seek(len(header) + len(name) + len(maxval))
+        image = np.fromfile(infile, dtype=np.uint8)
+        return image
 
     def transform_data(self, data):
         train_data = []
@@ -32,6 +40,7 @@ class ReductionDimension:
     def change_dimension(self, n_eigenvect, train_data):
         new_data = train_data * np.transpose(n_eigenvect)
         return new_data
+
 
 def visualize(data):
     fig = plt.figure(figsize=(40, 20))
@@ -54,22 +63,21 @@ def visualize(data):
             count += 1
     plt.show()
 
+def draw_eigenfaces(eigenvects, height, width):
+    for i in range(len(eigenvects)):
+        image = eigenvects.reshape((height, width))
+        plt.figimage(image)
+    plt.show()
+
 def pca():
-    testfilename = './datasource/test/zip.test'
-    trainigfolder = './datasource/training/'
-    testfile = open(testfilename, 'r')
+    trainigfolder = './datasource/faces/lfwcrop_grey/faces/'
     dim = ReductionDimension()
     dim.taketrainingdict(trainigfolder)
-    rawtrainingdict = dim.transform_data(dim.trainingarr)
-    dim.get_eigenvectors(rawtrainingdict, 2)
+    dim.get_eigenvectors(dim.trainingarr, 2)
 
-    new_data = {}
-    for i in range(len(dim.trainingarr)):
-        newarr = dim.change_dimension(dim.n_eigenvects, dim.trainingarr[i])
-        new_data[i] = newarr
-    visualize(new_data)
-
+    draw_eigenfaces(dim.n_eigenvects, 64, 64)
 
     return 0
 
 pca()
+
