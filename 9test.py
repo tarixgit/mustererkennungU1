@@ -14,39 +14,46 @@ class Data:
             for line in file:
                 arr = list(map(float, line.split(',')))
                 digitarrs.append(arr)
-            self.traingdata[digit] = digitarrs
+            self.traingdata[digit] = self.normalization(np.array(digitarrs))
 
+
+    def normalization(self, arr):
+        m, n = np.shape(arr)
+        #x0 = np.ones(m)
+        nor_arr = []
+        #label_arr = arr[:, n - 1]
+        for i in range(n):
+            xi = arr[:, i]
+            mean = np.mean(xi)
+            var = np.var(xi)
+            if (var == 0):
+                nor_arr.append(xi)
+            else:
+                nor_arr.append((xi - mean)/var)
+        nor_arr = np.transpose(nor_arr)
+        return nor_arr
 
 class Layer:
-    def __init__(self, neuronen, input_anzahl):  # fuer die esrte Schichte sind es attributen
+    def __init__(self, neuronen, input_anzahl, last_layer):  # fuer die esrte Schichte sind es attributen
         # self.gewichte = np.random.rand(neuronen, input_anzahl+1)
-        self.gewichte = list(np.random.rand(neuronen+1, input_anzahl+1))
+        if last_layer:
+            self.gewichte = np.random.rand(input_anzahl + 1, neuronen)
+            self.func = np.ones(neuronen)     #output auf jeder Schichte
+        else:
+            self.gewichte = np.random.rand(input_anzahl + 1, neuronen + 1)
+            self.func = np.ones(neuronen + 1)   #output auf jeder Schichte
         self.neuronen = neuronen
         self.input_anzahl = input_anzahl
-        self.func = np.ones(neuronen+1)
         self.ableitung = []
         self.e = []
         self.delta = []
 
-    # def calc_func_ableitung(self, input):   # input ist hier vorherige Ergebnisse
-    #     input.append(1)
-    #     sigmoid = lambda x: 1 / (1 + np.e ** (-x))
-    #     vf = np.vectorize(sigmoid)
-    #     self.func = vf(input * self.gewichte)    # output auf jeder Schichte       # schritt 1,2 in der Vorlesung
-    #     self.ableitung = self.func * (1 - self.func)    # schritt 4,5 in der Vorlesung
-
     def calc_func_ableitung(self, input):   # input ist hier vorherige Ergebnisse
-        # sigmoid = lambda x: 1 / (1 + np.e ** (-x))
-        # vf = np.vectorize(sigmoid)
-        # s = lambda x, y: x*y
-        # vs = np.vectorize(s)
-        # a = np.sum(vs(input, self.gewichte), axis=1)
-        # for i in range(len(a)):
-        #     self.func[i] = (1 / (1 + np.e ** (- MathTools.calc_func(input, self.gewichte))))
-        #  output auf jeder Schichte       # schritt 1,2 in der Vorlesung
-        self.func = MathTools.calc_func(input, self.gewichte)
-        self.ableitung = MathTools.calc_ableitung(self.func)
-        # self.ableitung = MathTools.list_each_list_multiply(self.func, (MathTools.value_list_sub(1, self.func)))    # schritt 4,5 in der Vorlesung
+        #  schritt 1,4 in der Vorlesung
+        #self.func = MathTools.calc_func(input, self.gewichte)
+        #self.ableitung = MathTools.calc_ableitung(self.func)
+        self.func = MathTools.sigmoid_vector(np.dot(input, self.gewichte))
+        self.ableitung = self.func * (1 - self.func)
 
     def calc_e(self, target):      # schritt 3 in der Vorlesung
         targetarr = np.zeros(10)
@@ -63,6 +70,12 @@ class MathTools:
         return 1 / (1 + np.e ** (-x))
 
     @staticmethod
+    def sigmoid_vector(vector):
+        for i in range(len(vector)):
+            vector[i] = 1 / (1 + np.e ** (-vector[i]))
+        return vector
+
+    @staticmethod
     def calc_func(list1, list2):
         list_new = []
         for i in range(len(list2)):
@@ -77,15 +90,15 @@ class MathTools:
         return list_new
 
     @staticmethod
-    def calc_delta(list1, list2, list3):
-        list_new = []
-        for i in range(len(list1[1])):
-            new = 0.0
-            for j in range(len(list1)-1):
-                new += list1[j][i] * list2[j]
-            new *= list3[i]
-            list_new.append(new)
-        return list_new
+    def calc_delta(gewichte, delta, ableitung):
+        #list_new = []
+        #for i in range(len(list1[1])):
+        #    new = 0.0
+        #    for j in range(len(list1)-1):
+        #        new += list1[j][i] * list2[j]
+        #    new *= list3[i]
+        #    list_new.append(new)
+        return ableitung * np.dot(gewichte, delta)
 
     @staticmethod
     def calc_delta_gewichte(learning_rate, delta, func):
@@ -155,32 +168,35 @@ class Neuronetz:
                 # a = np.sum(vs(self.layers[i].ableitung, self.layers[i+1].gewichte), axis=1)
                 # self.layers[i].delta = MathTools.list_each_list_multiply(
                 #     a, self.layers[i+1].delta)
-                self.layers[i].delta = list(MathTools.calc_delta(self.layers[i+1].gewichte, self.layers[i+1].delta,
-                                                                 self.layers[i].ableitung))
+                self.layers[i].delta = self.layers[i].ableitung * np.dot(self.layers[i+1].gewichte, self.layers[i+1].delta)
+                # O fuer Schritt 8,9 in der Vorlesung
                 if i != 0:
-                    # schritt 8,9 in der Vorlesung
                     b = self.layers[i - 1].func
                 else:
                     b = input
             else:
-                self.layers[i].delta = list(x + y for x, y in zip(self.layers[i].ableitung, self.layers[i].e))
+                self.layers[i].delta = self.layers[i].ableitung * self.layers[i].e
                 b = self.layers[i - 1].func
+                #vorherige O
             # delta_gewichte = MathTools.vaule_list_multiply((-learning_rate),
             #                                                    MathTools.list_each_list_multiply(
             #                                                        self.layers[i].delta, b))
+
+        for i in range(last_index, -1, -1):
+            # KOREKTUR
             delta_gewichte = MathTools.calc_delta_gewichte(learning_rate, self.layers[i].delta, b)
             self.layers[i].gewichte = MathTools.update_gewichte(self.layers[i].gewichte, delta_gewichte)
 
     def training(self, learning_rate, iteration, label, training_data):
-        neuron_length = len(self.layers)
-        training_data.append(1)
+        layer_length = len(self.layers)
+        training_data = np.append(training_data, 1)   #vector
         for i in range(iteration):
-            for k in range(neuron_length):
+            for k in range(layer_length):
                 if k != 0:
                     self.layers[k].calc_func_ableitung(self.layers[k - 1].func)
                 else:
                     self.layers[k].calc_func_ableitung(training_data)
-                if k == (neuron_length - 1):
+                if k == (layer_length - 1):
                     self.layers[k].calc_e(label)
             self.calc_dalta(learning_rate, training_data)
 
@@ -221,16 +237,14 @@ def test(neuronetz):
 
 def start():
     trainigfolder = './datasource/training/'
-    learning_rate = 100
+    learning_rate = 0.5
     iteration = 10
-    layer1 = Layer(50, 256)
-    layer2 = Layer(10, 50)
-    neuronetz = Neuronetz(np.array([layer1, layer2]))
+    layer1 = Layer(50, 256, False)
+    layer2 = Layer(10, 50, True)
+    neuronetz = Neuronetz([layer1, layer2])
     data = Data()
     data.taketrainingdict(trainigfolder)
     for j in range(len(data.traingdata[6])):       # len(data[i]) : die Anzahl allen Punkte einer Ziffer
-            if j % 100 == 0:
-                print(j)
             neuronetz.training(learning_rate, iteration, 6, data.traingdata[6][j])
     test(neuronetz)
 
