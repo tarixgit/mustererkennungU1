@@ -180,9 +180,9 @@ class Neuronetz:
         for i in range(last_index, -1, -1):
             # KOREKTUR
             if i != 0:
-                delta_gewichte = (learning_rate * self.layers[i].delta) * self.layers[i - 1].func
+                delta_gewichte = np.outer(self.layers[i - 1].func, (learning_rate * self.layers[i].delta))
             else:
-                delta_gewichte = (learning_rate * self.layers[i].delta) * input
+                delta_gewichte = np.outer(input, (learning_rate * self.layers[i].delta))
 
             self.layers[i].gewichte = self.layers[i].gewichte - delta_gewichte
 
@@ -237,7 +237,7 @@ def test(neuronetz):
 def start():
     trainigfolder = './datasource/training/'
     learning_rate = 0.5
-    iteration = 10
+    iteration = 100
     layer1 = Layer(50, 256, False)
     layer2 = Layer(10, 50, True)
     neuronetz = Neuronetz([layer1, layer2])
