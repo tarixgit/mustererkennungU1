@@ -238,14 +238,15 @@ def test(neuronetz):
 def start():
     trainigfolder = './datasource/training/'
     learning_rate = 0.5
-    iteration = 3
-    layer1 = Layer(10, 256, False)
-    layer2 = Layer(10, 10, True)
-    neuronetz = Neuronetz([layer1, layer2])
+    iteration = 100
+    layer1 = Layer(50, 256, False)
+    layer2 = Layer(50, 50, False)
+    layer3 = Layer(10, 50, True)
+    neuronetz = Neuronetz([layer1, layer2, layer3])
     data = Data()
     data.taketrainingdict(trainigfolder)
-    for j in range(len(data.traingdata[6])):       # len(data[i]) : die Anzahl allen Punkte einer Ziffer
-            neuronetz.training(learning_rate, iteration, 6, data.traingdata[6][j])
+    for j in range(len(data.traingdata[0])):       # len(data[i]) : die Anzahl allen Punkte einer Ziffer
+            neuronetz.training(learning_rate, iteration, 0, data.traingdata[0][j])
     test(neuronetz)
 
 
