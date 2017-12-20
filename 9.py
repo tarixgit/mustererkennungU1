@@ -210,8 +210,10 @@ def test(neuronetz):
     print("File for testing is open: ", testfile.name)
     errors = 0
     all = 0
+    alleach = {}
     errorrate = {}
     for i in range(10):
+        alleach[i] = 0
         errorrate[i] = 0
     for line in testfile:
         digit = int(line[:1])
@@ -221,19 +223,22 @@ def test(neuronetz):
         if digit != foundDigit:
             errors += 1
             errorrate[digit] += 1
+        alleach[digit] += 1
         all += 1
     print("All tests: ", all)
     print("Count of all errors: ", errors)
     print("Error for every Digit: ", errorrate)
+    for i in range(len(alleach)):
+        print("accuracy:" + str(1-(errorrate[i]/alleach[i])))
 
 
 def start():
     trainigfolder = './datasource/training/'
     learning_rate = 0.5
-    iteration = 100
+    iteration = 500
     layer1 = Layer(50, 256, False)
-    layer2 = Layer(50, 50, False)
-    layer3 = Layer(10, 50, True)
+    layer2 = Layer(20, 50, False)
+    layer3 = Layer(10, 20, True)
     neuronetz = Neuronetz([layer1, layer2, layer3])
     data = Data()
     data.taketrainingdict(trainigfolder)
@@ -245,3 +250,41 @@ def start():
 
 
 start()
+
+
+def test_logic(neuronetz):
+    and_data = list(([0, 0, 0], [0, 1, 0], [1, 0, 0], [1, 1, 1]))
+    or_data = list(([0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 1]))
+    xor_data = list(([0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]))
+    data = [and_data, or_data, xor_data]
+    right = {}
+    alltest = {}
+    for i in range(len(data)):
+        right[i] = 0
+        alltest[i] = 0
+        for j in range(len(data[i])):
+            data[i][j] = np.append(data[i][j], 1)
+            found = neuronetz.test(data[i][j])
+            if found == i:
+                right[i] += 1
+            alltest[i] += 1
+            print(str(i) + " :accuracy: " + str(right[i]/alltest[i]))
+
+
+def logische_funktion():
+    learning_rate = 0.5
+    iteration = 100
+    layer1 = Layer(6, 3, False)
+    layer2 = Layer(3, 6, True)
+    neuronetz = Neuronetz([layer1, layer2])
+    and_data = np.array(([0, 0, 0], [0, 1, 0], [1, 0, 0], [1, 1, 1]))
+    or_data = np.array(([0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 1]))
+    xor_data = np.array(([0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]))
+    data = [and_data, or_data, xor_data]
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            neuronetz.training(learning_rate, iteration, i, data[i][j])
+    test_logic(neuronetz)
+
+
+logische_funktion()
