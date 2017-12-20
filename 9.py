@@ -227,10 +227,11 @@ def test(neuronetz):
 def start():
     trainigfolder = './datasource/training/'
     learning_rate = 0.5
-    iteration = 300
+    iteration = 100
     layer1 = Layer(50, 256, False)
-    layer2 = Layer(10, 50, True)
-    neuronetz = Neuronetz([layer1, layer2])
+    layer2 = Layer(50, 50, False)
+    layer3 = Layer(10, 50, True)
+    neuronetz = Neuronetz([layer1, layer2, layer3])
     data = Data()
     data.taketrainingdict(trainigfolder)
     for i in range(len(data.traingdata)):      # len(data) : 10
