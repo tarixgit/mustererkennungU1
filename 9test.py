@@ -206,7 +206,7 @@ class Neuronetz:
                 self.layers[i].calc_func_ableitung(self.layers[i-1].func)
                 if i == (last_index - 1):
                     a = np.array(self.layers[i].func)
-                    return np.where(np.max(a))
+                    return a.argmax()
             else:
                 self.layers[i].calc_func_ableitung(test_data)
 
@@ -225,6 +225,7 @@ def test(neuronetz):
         arr = list(map(float, line[2:].split(' ')))
         arr.append(1)
         foundDigit = neuronetz.test(arr)
+        print(foundDigit)
         if digit != foundDigit:
             errors += 1
             errorrate[digit] += 1
@@ -237,9 +238,9 @@ def test(neuronetz):
 def start():
     trainigfolder = './datasource/training/'
     learning_rate = 0.5
-    iteration = 100
-    layer1 = Layer(50, 256, False)
-    layer2 = Layer(10, 50, True)
+    iteration = 3
+    layer1 = Layer(10, 256, False)
+    layer2 = Layer(10, 10, True)
     neuronetz = Neuronetz([layer1, layer2])
     data = Data()
     data.taketrainingdict(trainigfolder)
