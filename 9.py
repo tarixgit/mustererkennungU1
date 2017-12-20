@@ -55,6 +55,9 @@ class Layer:
         self.func = MathTools.sigmoid_vector(np.dot(input, self.gewichte))
         self.ableitung = self.func * (1 - self.func)
 
+    def calc_func(self, input):   # input ist hier vorherige Ergebnisse
+        self.func = MathTools.sigmoid_vector(np.dot(input, self.gewichte))
+
     def calc_e(self, target):      # schritt 3 in der Vorlesung
         targetarr = np.zeros(10)
         targetarr[target] = 1
@@ -193,12 +196,12 @@ class Neuronetz:
         last_index = len(self.layers)
         for i in range(last_index):
             if i != 0:
-                self.layers[i].calc_func_ableitung(self.layers[i-1].func)
+                self.layers[i].calc_func(self.layers[i-1].func)
                 if i == (last_index - 1):
                     a = np.array(self.layers[i].func)
                     return a.argmax()
             else:
-                self.layers[i].calc_func_ableitung(test_data)
+                self.layers[i].calc_func(test_data)
 
 
 def test(neuronetz):
