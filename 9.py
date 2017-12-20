@@ -249,13 +249,14 @@ def start():
     test(neuronetz)
 
 
-start()
+# start()
 
 
 def test_logic(neuronetz):
     and_data = list(([0, 0, 0], [0, 1, 0], [1, 0, 0], [1, 1, 1]))
     or_data = list(([0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 1]))
     xor_data = list(([0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]))
+    art = list(["and", "or", "xor"])
     data = [and_data, or_data, xor_data]
     right = {}
     alltest = {}
@@ -268,7 +269,7 @@ def test_logic(neuronetz):
             if found == i:
                 right[i] += 1
             alltest[i] += 1
-            print(str(i) + " :accuracy: " + str(right[i]/alltest[i]))
+            print(str(art[i]) + " :accuracy: " + str(right[i]/alltest[i]))
 
 
 def logische_funktion():
