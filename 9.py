@@ -1,4 +1,5 @@
 import numpy as np
+import random as rm
 import matplotlib.pyplot as plt
 
 
@@ -14,7 +15,21 @@ class Data:
             for line in file:
                 arr = list(map(float, line.split(',')))
                 digitarrs.append(arr)
-            self.traingdata[digit] = self.normalization(np.array(digitarrs))
+            # self.traingdata[digit] = self.normalization(np.array(digitarrs))
+            self.traingdata[digit] = digitarrs
+
+    def randomtrainingdict(self, trainigfolder):
+        digitarrs = []
+        for digit in range(10):
+            filename = trainigfolder + 'train.' + str(digit)
+            file = open(filename, 'r')
+            for line in file:
+                arr = list(map(float, line.split(',')))
+                # arr.self.normalization()
+                arr.append(digit)
+                digitarrs.append(arr)
+        self.traingdata = digitarrs
+        rm.shuffle(self.traingdata)
 
 
     def normalization(self, arr):
@@ -229,27 +244,34 @@ def test(neuronetz):
     print("Count of all errors: ", errors)
     print("Error for every Digit: ", errorrate)
     for i in range(len(alleach)):
-        print("accuracy:" + str(1-(errorrate[i]/alleach[i])))
+        print("accuracy of " + str(i) + ": " + str(1-(float(errorrate[i])/alleach[i])))
 
 
 def start():
-    trainigfolder = './datasource/training/'
+    trainingfolder = './datasource/training/'
     learning_rate = 0.5
     iteration = 500
     layer1 = Layer(50, 256, False)
-    layer2 = Layer(20, 50, False)
-    layer3 = Layer(10, 20, True)
-    neuronetz = Neuronetz([layer1, layer2, layer3])
+    # layer2 = Layer(20, 50, False)
+    # layer3 = Layer(10, 20, True)
+    layer2 = Layer(10, 50, True)
+    neuronetz = Neuronetz([layer1, layer2])
     data = Data()
-    data.taketrainingdict(trainigfolder)
-    for i in range(len(data.traingdata)):      # len(data) : 10
-        print(i)
-        for j in range(len(data.traingdata[i])):       # len(data[i]) : die Anzahl allen Punkte einer Ziffer
-            neuronetz.training(learning_rate, iteration, i, data.traingdata[i][j])
+    # data.taketrainingdict(trainingfolder)
+    # for i in range(len(data.traingdata)):      # len(data) : 10
+    #     print(i)
+    #     for j in range(len(data.traingdata[i])):       # len(data[i]) : die Anzahl allen Punkte einer Ziffer
+    #         neuronetz.training(learning_rate, iteration, i, data.traingdata[i][j])
+
+    data.randomtrainingdict(trainingfolder)
+    for j in range(len(data.traingdata)):       # len(data[i]) : die Anzahl allen Punkte einer Ziffer
+        i = data.traingdata[j][-1]
+        data.traingdata[j].pop()
+        neuronetz.training(learning_rate, iteration, i, data.traingdata[j])
     test(neuronetz)
 
 
-# start()
+start()
 
 
 def test_logic(neuronetz):
@@ -288,4 +310,4 @@ def logische_funktion():
     test_logic(neuronetz)
 
 
-logische_funktion()
+# logische_funktion()
