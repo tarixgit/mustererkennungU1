@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-from math import  log
+import copy
+from math import log
 from numpy.linalg import pinv
 from sklearn.model_selection import train_test_split
 
@@ -53,26 +54,43 @@ class FeatureClassifier(Classifier):
 class Adaboost():
     def fit_ada(self, X, y, clf_list, m):
         self.alpha_list = []
+        clf_list_new = []
         data_size = len(y)
         weight = np.ones(data_size)
         weight.shape = (data_size, 1)
         for i in range(m):
-            em_list = []
+            we_list = []
+            w_list = []
             for j in range(len(clf_list)):
                 clf_list[j].fit(weight * X, y)
-                em_list.append(1 - clf_list[j].score(X, y))
-            em = min(em_list)
+                one_list = []
+                we = 0.0
+                w = 0.0
+                for k in range(data_size):
+                    one_list.append(X[k])
+                    # wi = np.e ** (-y[k] * self.predict_ada(one_list, y[k]))
+                    wi = weight[k]
+                    w += wi
+                    if clf_list[j].score(weight[k] * one_list, y[k]) == 0.0:
+                        we += wi
+                    one_list = []
+                we_list.append(we)
+                w_list.append(w)
+            we = min(we_list)
+            a = we_list.index(we)
+            clf_new = copy.deepcopy(clf_list[a])
+            clf_list_new.append(clf_new)
+            em = we/w
             alpha = 0.5 * log((1 - em) / em)
             self.alpha_list.append(alpha)
-            one_list = []
-            for j in range(data_size):
-                one_list.append(X[j])
-                if clf_list[i].score(weight[j] * one_list, y[j]) == 0.0:
-                    weight[j] = weight[j] * (np.e ** alpha)
+            for p in range(data_size):
+                one_list.append(X[p])
+                if clf_list[a].score(weight[p] * one_list, y[p]) == 0.0:
+                    weight[p] = weight[p] * (np.e ** alpha)
                 else:
-                    weight[j] = weight[j] * (np.e ** (-alpha))
+                    weight[p] = weight[p] * (np.e ** (-alpha))
                 one_list = []
-        self.clf_list = clf_list
+        self.clf_list = clf_list_new
 
     def predict_ada(self, X, y):
         alpha_size = len(self.alpha_list)
@@ -87,44 +105,8 @@ class Adaboost():
                 sum_ada[i] = 0
         print(np.mean(sum_ada == y))
 
-    # def fit_copy(m):
-    #     data = pd.read_csv("datasource/spambase.data", header=None).as_matrix()
-    #     X = data[:, :-1]
-    #     y = data[:, -1]
-    #     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=30, stratify=y)
-    #     clf_list = []
-    #     alpha_list = []
-    #     data_size = len(y_train)
-    #     weight = np.ones(data_size)
-    #     weight.shape = (data_size, 1)
-    #     for i in range(m):
-    #         clf = FisherDiscriminantClassifier()
-    #         clf.fit(weight * X_train, y_train)
-    #         em = clf.score(X_train, y_train)
-    #         alpha = 0.5 * log((1 - em)/em)
-    #         alpha_list.append(alpha)
-    #         one_list = []
-    #         for j in range(data_size):
-    #             one_list.append(X_train[j])
-    #             if clf.score(weight[j]*one_list, y_train[j]) == 0.0:
-    #                 weight[j] = weight[j] * (np.e ** alpha)
-    #             else:
-    #                 weight[j] = weight[j] * (np.e ** (-alpha))
-    #             one_list = []
-    #         clf_list.append(clf)
-    #     alpha_size = len(alpha_list)
-    #     sum_ada = np.zeros(len(y_test))
-    #     for i in range(alpha_size):
-    #         sum_ada += alpha_list[i] * (clf_list[i].predict(X_test))
-    #     for i in range(len(y_test)):
-    #         if sum_ada[i] < 0:
-    #             sum_ada[i] = 1
-    #         else:
-    #             sum_ada[i] = 0
-    #     print(np.mean(sum_ada == y_test))
 
-
-def ada_test():
+def ada_test(m):
     data = pd.read_csv("datasource/spambase.data", header=None).as_matrix()
     X = data[:, :-1]
     y = data[:, -1]
@@ -134,48 +116,27 @@ def ada_test():
     clf1.fit_m(X_train, y_train, 55)
     clf_list1.append(clf1)
     clf2 = FeatureClassifier()
-    clf2.fit_m(X_train, y_train, 54)
+    clf2.fit_m(X_train, y_train, 23)
     clf_list1.append(clf2)
     clf3 = FeatureClassifier()
-    clf3.fit_m(X_train, y_train, 13)
+    clf3.fit_m(X_train, y_train, 38)
     clf_list1.append(clf3)
     clf4 = FeatureClassifier()
-    clf4.fit_m(X_train, y_train, 52)
+    clf4.fit_m(X_train, y_train, 29)
     clf_list1.append(clf4)
     clf5 = FeatureClassifier()
-    clf5.fit_m(X_train, y_train, 51)
+    clf5.fit_m(X_train, y_train, 45)
     clf_list1.append(clf5)
     clf6 = FeatureClassifier()
-    clf6.fit_m(X_train, y_train, 22)
+    clf6.fit_m(X_train, y_train, 4)
     clf_list1.append(clf6)
-    clf7 = FeatureClassifier()
-    clf7.fit_m(X_train, y_train, 25)
-    clf_list1.append(clf7)
-    clf8 = FeatureClassifier()
-    clf8.fit_m(X_train, y_train, 24)
-    clf_list1.append(clf8)
-    clf9 = FeatureClassifier()
-    clf9.fit_m(X_train, y_train, 10)
-    clf_list1.append(clf9)
-    clf10 = FeatureClassifier()
-    clf10.fit_m(X_train, y_train, 16)
-    clf_list1.append(clf10)
-    score_list = []
-    clf_list = []
-    for i in range(len(clf_list1)):
-        score_list.append(clf_list1[i].score(X_train, y_train))
-    for i in np.argsort(score_list[::-1]):
-        clf_list.append(clf_list1[i])
     ada = Adaboost()
-    ada.fit_ada(X_train, y_train, clf_list)
+    ada.fit_ada(X_train, y_train, clf_list1, m)
     ada.predict_ada(X_test, y_test)
 
 
-ada_test()
+ada_test(20)
 
-
-# Ich denke, fuer basis classifier koennen wir diese fischer linear classifier nutzen.
-# und diese classifier(alle codes daoben) habe ich von der Musterloesung kopiert
 
 
 
