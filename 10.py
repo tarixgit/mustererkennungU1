@@ -10,6 +10,7 @@ class Classifier:
         predictions = self.predict(X)
         return np.mean(predictions == y)
 
+# naechste Funktion wird nihct benutzt
     def confusion_matrix(self, X, y):
         size = len(set(y))
         predicted = self.predict(X)
@@ -21,66 +22,15 @@ class Classifier:
 
         return results
 
-
-# def mean(X):
-#     return np.mean(X, axis=0)
-#
-#
-# def covariance_matrix(X, mu):
-#     num_samples, _ = X.shape
-#     X_normalized = X - mu
-#     return X_normalized.T.dot(X_normalized) / num_samples
-#
-#
-# def univariate_normal_distribution_pdf(x, mu, sigma):
-#     x_normalised = x - mu
-#     exponent = -(x_normalised ** 2 / (2 * sigma ** 2))
-#     normalisation_term = 1. / np.sqrt(2 * np.pi * sigma ** 2)
-#     return normalisation_term * np.e ** exponent
-
-
-# class FisherDiscriminantClassifier(Classifier):
-#
-#     def fit(self, X, y):
-#         X_pos, X_neg = self._split_binary(X, y)
-#         self._find_best_axis(X_pos, X_neg)
-#         self._compute_parameters(X_pos, X_neg)
-#
-#     def _split_binary(self, X, y):
-#         labels = np.unique(y)
-#         return X[y == labels[1]], X[y == labels[0]]
-#
-#     def _find_best_axis(self, X_pos, X_neg):
-#         mu1 = mean(X_pos)
-#         sigma1 = covariance_matrix(X_pos, mu1)
-#
-#         mu2 = mean(X_neg)
-#         sigma2 = covariance_matrix(X_neg, mu2)
-#
-#         self.u = pinv(sigma1 + sigma2).dot(mu1 - mu2)
-#
-#     def _compute_parameters(self, X_pos, X_neg):
-#         X_pos_transformed = self._transform(X_pos)
-#         self.mu1 = mean(X_pos_transformed)
-#         self.sigma1 = np.var(X_pos_transformed)
-#
-#         X_neg_transformed = self._transform(X_neg)
-#         self.mu2 = mean(X_neg_transformed)
-#         self.sigma2 = np.var(X_neg_transformed)
-#
-#     def _transform(self, X):
-#         return np.matmul(X, self.u)
-#
-#     def predict(self, X):
-#         X_transformed = self._transform(X)
-#
-#         probs_pos = univariate_normal_distribution_pdf(X_transformed, self.mu1, self.sigma1)
-#         probs_neg = univariate_normal_distribution_pdf(X_transformed, self.mu2, self.sigma2)
-#
-#         results = np.ones(len(X))
-#         results[probs_pos < probs_neg] = 0
-#         return results
-
+# Das ist unsere Bassisklassifikator, dass die Klasse Classifier veerbert
+# es wurde zuerst gedacht, mehr komplexer Klassifkator zu schreiben
+# es wurde gesagt, dass es reicht Klassifikator zuschreieben, der mehr als 50 % ausweist
+# Deswegen funktioniert unserer Klassifikator aehnlich wie Linear Distribution(Regression)
+# Aber nur eingesetzt auf bestimmten Feature(Merkmale)
+# Deswegen erstellen wir spaeter Klassifikatoren auf dem Basis von "FeatureClassifier" mit verschiedenen Merkmalen,
+# die am besten passen, um Spam-NichSpam zu unterscheieden
+# Merkmale speuchern wir hier unter self.m
+# self.fit_attribute - Mitte, die Menge auf Spam-NichSpam trennt
 class FeatureClassifier(Classifier):
     def fit_m(self, X, y, m):
         self.fit_attribute = np.mean(X[:, m])
@@ -97,7 +47,7 @@ class FeatureClassifier(Classifier):
                 results[i] = 0.0
         return results
 
-
+#Adaboost algorithm
 class Adaboost():
     def fit_ada(self, X, y, clf_list):
         m = len(clf_list)
