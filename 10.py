@@ -99,15 +99,17 @@ class FeatureClassifier(Classifier):
 
 
 class Adaboost():
-    def fit_ada(self, X, y, clf_list):
-        m = len(clf_list)
+    def fit_ada(self, X, y, clf_list, m):
         self.alpha_list = []
         data_size = len(y)
         weight = np.ones(data_size)
         weight.shape = (data_size, 1)
         for i in range(m):
-            clf_list[i].fit(weight * X, y)
-            em = 1 - clf_list[i].score(X, y)
+            em_list = []
+            for j in range(len(clf_list)):
+                clf_list[j].fit(weight * X, y)
+                em_list.append(1 - clf_list[j].score(X, y))
+            em = min(em_list)
             alpha = 0.5 * log((1 - em) / em)
             self.alpha_list.append(alpha)
             one_list = []
