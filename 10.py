@@ -83,10 +83,11 @@ class Adaboost():
             em = we/w
             alpha = 0.5 * log((1 - em) / em)
             self.alpha_list.append(alpha)
-            for p in range(data_size):
-                one_list.append(X[p])
-                if clf_list[a].score(weight[p] * one_list, y[p]) == 0.0:
-                    weight[p] = weight[p] * (np.e ** alpha)
+            one_list = []
+            for j in range(data_size):
+                one_list.append(X[j])
+                if clf_list[i].score(weight[j] * one_list, y[j]) == 0.0:
+                    weight[j] = weight[j] * (np.e ** alpha)
                 else:
                     weight[p] = weight[p] * (np.e ** (-alpha))
                 one_list = []
@@ -131,6 +132,12 @@ def ada_test(m):
     clf6 = FeatureClassifier()
     clf6.fit_m(X_train, y_train, 4)
     clf_list1.append(clf6)
+    print(clf1.score(X_test, y_test))
+    print(clf2.score(X_test, y_test))
+    print(clf3.score(X_test, y_test))
+    print(clf4.score(X_test, y_test))
+    print(clf5.score(X_test, y_test))
+    print(clf6.score(X_test, y_test))
     ada = Adaboost()
     ada.fit_ada(X_train, y_train, clf_list1, m)
     ada.predict_ada(X_test, y_test)
