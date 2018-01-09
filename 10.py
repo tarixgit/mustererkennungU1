@@ -40,7 +40,7 @@ class FeatureClassifier(Classifier):
 
     def fit(self, X, y):
         self.fit_attribute = np.mean(X[:, self.m])
-
+#
     def predict(self, X):
         X_attribute = X[:, self.m]
         results = np.ones(len(X))
@@ -60,11 +60,14 @@ class Adaboost():
         for i in range(m):
             clf_list[i].fit(weight * X, y)
             em = 1 - clf_list[i].score(X, y)
+            # alpha ist die Klassifikator-Gewichte
             alpha = 0.5 * log((1 - em) / em)
             self.alpha_list.append(alpha)
             one_list = []
             for j in range(data_size):
                 one_list.append(X[j])
+                # Funktion score arbeitet nur mit der Matrize, deswegen haben wir hier "one_list"
+                # hier berechnen wir die die Gewichte fuer Datenpunkt
                 if clf_list[i].score(weight[j] * one_list, y[j]) == 0.0:
                     weight[j] = weight[j] * (np.e ** alpha)
                 else:
@@ -72,6 +75,7 @@ class Adaboost():
                 one_list = []
         self.clf_list = clf_list
 
+    # hier ist schon das Testen
     def predict_ada(self, X, y):
         alpha_size = len(self.alpha_list)
         sum_ada = np.zeros(len(y))
