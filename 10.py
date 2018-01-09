@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 
 class Classifier:
-# hier wird gerechnet, wie hoch ist Fehlerrate
+# hier wird gerechnet, wie hoch ist die Genauigkeit
 # predictions - das ist das Ergebnis vom Klassifikator
     def score(self, X, y):
         predictions = self.predict(X)
@@ -31,8 +31,8 @@ class Classifier:
 # Deswegen funktioniert unserer Klassifikator aehnlich wie Linear Distribution(Regression)
 # Aber nur eingesetzt auf bestimmten Feature(Merkmale)
 # Deswegen erstellen wir spaeter Klassifikatoren auf dem Basis von "FeatureClassifier" mit verschiedenen Merkmalen,
-# die am besten passen, um Spam-NichSpam zu unterscheieden
-# Merkmale speuchern wir hier unter self.m
+# die am besten passen, um Spam-NichtSpam zu unterscheieden
+# Merkmale speichern wir hier unter self.m
 # self.fit_attribute - Mitte auf einer Achse(auf ausgewaehltem Attribut), die unsere Menge von allen Vektoren von auf Spam-NichSpam trennt
 class FeatureClassifier(Classifier):
     def fit_m(self, X, y, m):
@@ -92,6 +92,7 @@ class Adaboost():
                 one_list = []
         self.clf_list = clf_list_new
 
+    # hier ist schon das Testen
     def predict_ada(self, X, y):
         alpha_size = len(self.alpha_list)
         sum_ada = np.zeros(len(y))
